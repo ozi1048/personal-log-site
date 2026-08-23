@@ -52,8 +52,11 @@
 - [ ] Site Kitで接続中のaccount/property/web streamが`G-S7GS8NFDWG`と一致することを確認
 - [ ] Cloudflare productionの`PUBLIC_GA_MEASUREMENT_ID`へ`G-S7GS8NFDWG`を設定
 - [ ] Tag Assistantで単一発火、GA4 Realtime/DebugViewで受信確認
-- [ ] Search Console property type、owner、verification方式を記録
-- [ ] DNS/HTML verification tokenをCloudflare版へ維持
+- [x] Search Consoleは既存propertyを維持し、Change of Addressを実施しない方針を確認
+- [x] DNS所有権確認TXT `google-site-verification=K2Dl7H9zuV7C8epZencG_7rctK9U8B1aZOlVR6FLFt4`を記録
+- [ ] 現在のHTML verification fileをCloudflare版でも同一path・内容で維持できることを確認
+- [ ] Cloudflare apex TXTへDNS所有権確認値を追加し、既存HTML方式と併用
+- [ ] NS切り替え後、Search ConsoleでDNS方式の所有権を再確認
 
 ## DNS / Cloudflare
 
@@ -65,9 +68,10 @@
 - [ ] Xserver管理画面から完全なDNS zoneをexport
 - [ ] 独自ドメインemailが各サービスのログイン・復旧先・公開連絡先に残っていないことを確認
 - [ ] Cloudflare pending zoneへ必要なWeb/verification recordだけを登録
+- [ ] apex TXTへ`google-site-verification=K2Dl7H9zuV7C8epZencG_7rctK9U8B1aZOlVR6FLFt4`を登録
 - [ ] MX、Xserver用SPF/DKIM、mail、ftp、未使用wildcardをCloudflareへ移行していないことを確認
 - [ ] Cloudflare Email Routingが無効であることを確認
-- [ ] Cloudflare assigned NSへの直接queryでWeb/verification recordを確認
+- [ ] Cloudflare assigned NSへの直接queryでWeb recordとGoogle verification TXTを確認
 - [ ] DNSSEC/DS状態をregistrarで確認
 - [ ] Cloudflare NSへ変更後、Worker routeなしでWordPress/Web/画像を24〜48時間確認
 - [ ] production Workerを別名でdeployしversion固定

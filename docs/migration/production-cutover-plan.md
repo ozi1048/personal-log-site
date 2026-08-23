@@ -17,12 +17,12 @@ R2移行前は、`calmapercorso.com`をWorker Custom Domainにしない。Cloudf
 5. `url-mapping.csv`、WordPress sitemap、robots.txt、主要HTML、レスポンスヘッダーを保存する。
 6. Xserver DNS管理画面から**全レコードをexportまたは画面保存**する。公開照会だけで完全性を判断しない。
 7. `xserver-mail-dns-plan.md`の利用終了方針に従い、独自ドメインメールがアカウント復旧先、公開連絡先、Formspree通知先に残っていないことを確認する。必要な過去メールはXserver解約前にexportする。
-8. Cloudflare pending zoneにはapex、必要なwww、Search Console等のverification recordだけを登録する。MX、Xserver用SPF/DKIM、mail、ftp、未使用wildcardは複製せず、Cloudflare Email Routingも有効化しない。
+8. Cloudflare pending zoneにはapex、必要なwww、Search Console等のverification recordだけを登録する。apex TXTへ`google-site-verification=K2Dl7H9zuV7C8epZencG_7rctK9U8B1aZOlVR6FLFt4`を追加し、Cloudflare assigned NSへの直接queryで一致を確認する。MX、Xserver用SPF/DKIM、mail、ftp、未使用wildcardは複製せず、Cloudflare Email Routingも有効化しない。
 9. registrarのDNSSEC/DS状態を確認する。DSがある場合はCloudflare公式手順に従い、NS変更前に安全に移行する。
 10. Cloudflare production Workerをpreviewとは別名でdeployし、version IDを記録する。まだrouteを付けない。
 11. production Workerのversion preview URLで28正常URL、404、canonical、robots、画像を検証する。
 12. GA4の`G-S7GS8NFDWG`をCloudflare production環境変数`PUBLIC_GA_MEASUREMENT_ID`へ設定し、build成果物に1タグだけ存在することを確認する。ソースコードとpreview環境には設定しない。
-13. Search Console propertyと所有権tokenを記録し、Cloudflare DNS/HTMLへ引き継ぐ準備をする。
+13. Search Consoleは既存propertyを維持する。現在のHTML verification fileを同一path・内容でCloudflare版にも残し、追加するDNS TXTと二重化する。Change of Addressは実施しない。
 14. Formspree + Turnstileの通知先を外部メールアドレスに設定し、domain制限、保持期間、プライバシー文言を承認してproduction previewで試験送信する。
 15. ロールバック担当、Cloudflare/Xserver/registrarへログインできる担当、判定時刻を決める。
 
@@ -66,7 +66,7 @@ R2移行前は、`calmapercorso.com`をWorker Custom Domainにしない。Cloudf
 
 各URLでstatus、title、H1、canonical、noindex不在、OGP、schema、CSS、featured/body image、内部リンクを確認する。画像26 URLへ直接アクセスし200を確認する。PCとiPhone/Android相当幅でトップ、長文記事、関連記事、表、前後ナビ、お問い合わせを確認する。
 
-GA4はTag Assistantで重複タグがないことを確認し、Realtime/DebugViewにテストpage_viewが到着することを確認する。Search Consoleはrobots.txtとsitemapをURL検査し、既存sitemap URLを再送信する。
+GA4はTag Assistantで重複タグがないことを確認し、Realtime/DebugViewにテストpage_viewが到着することを確認する。Search ConsoleはDNS TXT方式で所有権を再確認し、HTMLファイル方式も維持されていることを確認する。その後robots.txtとsitemapをURL検査し、既存sitemap URLを再送信する。Change of Addressは実施しない。
 
 ## T+30分〜48時間
 
@@ -84,7 +84,7 @@ Goは次をすべて満たす場合のみ。
 - 画像26/26がRoute迂回で200
 - production noindex 0、404だけnoindex
 - GA4 Measurement ID `G-S7GS8NFDWG`のproduction設定・単一発火
-- Search Console ownership維持方法確定
+- Search Consoleの既存property、HTML verification file、Google verification TXTが維持され、DNS方式で再確認可能
 - Formspree + Turnstileから外部メールアドレスへの試験通知成功
 - 必要なWeb/verification DNS recordがCloudflareに登録され、旧メールrecordを移行しない方針を確認済み
 - rollback担当が旧WordPressへ戻す操作を確認済み
