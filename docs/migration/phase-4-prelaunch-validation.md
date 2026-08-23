@@ -12,10 +12,10 @@ Astroのコンテンツ・URL・SEO実装は本番切り替え候補として合
 
 ただし、現時点で本番切り替えを実行してはいけない。残る切り替えゲートは次の4点。
 
-1. XserverからCloudflareへ移す完全なDNSレコード一覧の取得と、メールを含むゾーン複製
+1. Cloudflareへ登録するWeb/verification DNS recordの確定とDNSSEC/DS確認
 2. 同一ドメインのWordPress画像を維持するWorker Route除外設定の事前テスト
 3. 実際のGA4 Measurement IDとSearch Console所有権方式の確認
-4. お問い合わせの送信先とFormspree/Turnstile設定の決定・プライバシー文言更新
+4. お問い合わせの外部メール通知先とFormspree/Turnstile設定の決定・プライバシー文言更新
 
 ## 全ページ検証
 
@@ -90,7 +90,7 @@ sitemap 28 URLの内訳は、トップ1、記事19、記事一覧1、カテゴ�
 | 外部フォーム（Formspree + Turnstile） | 低 | Freeは50件/月 | Turnstile、domain制限、サービス側filter | 第三者へ送信しFreeは30日保持 | ベンダー依存だが保守最小 | **現在の推奨** |
 | `mailto:`のみ | 最小 | $0 | 公開アドレスが収集されやすい | メールクライアント内 | 端末設定依存、送信完了を確認しにくい | 一時的な退避策 |
 
-推奨はFormspree Free + Cloudflare Turnstile。1フォーム、月50件以内を開始条件とし、送信元domain制限を有効化する。Turnstileは個人ブログ向けFree planがあり、FormspreeはTurnstileを直接サポートする。送信先メール、保持期間への同意、Formspreeを処理委託先としてプライバシーポリシーへ記載する文言を決めてから実装する。件数増加、独自保持方針、HakubaSafetyとの共通化が必要になった時点でWorker APIへ移行する。
+推奨はFormspree Free + Cloudflare Turnstile。1フォーム、月50件以内を開始条件とし、送信元domain制限を有効化する。Turnstileは個人ブログ向けFree planがあり、FormspreeはTurnstileを直接サポートする。通知先は`calmapercorso.com`ではない外部メールアドレスとし、保持期間への同意、Formspreeを処理委託先としてプライバシーポリシーへ記載する文言を決めてから実装する。件数増加、独自保持方針、HakubaSafetyとの共通化が必要になった時点でWorker APIへ移行する。
 
 参考: [Turnstile plans](https://developers.cloudflare.com/turnstile/plans/)、[Turnstile server-side validation](https://developers.cloudflare.com/turnstile/get-started/server-side-validation/)、[Formspree account limits](https://help.formspree.io/articles/account-management/account-limits)、[Formspree Turnstile](https://help.formspree.io/articles/form-and-project-settings/protecting-your-forms-with-cloudflare-turnstile/)
 
@@ -128,7 +128,7 @@ R2 StandardのFree tierは10 GB-month、Class A 100万/月、Class B 1000万/月
 
 ## DNS / 画像継続に関する重要事項
 
-現在のauthoritative NSは`ns1.xserver.jp`〜`ns5.xserver.jp`、apex/www/wildcardは`85.131.213.48`、公開レコードのTTLは概ね3600秒。MXはapex自身を指すため、apexをCloudflare proxy化する前にメール配送先を分離する必要がある。推奨候補はDNS onlyの`mail.calmapercorso.com -> 85.131.213.48`と、`MX @ -> mail.calmapercorso.com`。SPF、`default._domainkey` DKIMもCloudflareへ完全複製する。詳細は`dns-baseline.json`と`xserver-mail-dns-plan.md`。
+現在のauthoritative NSは`ns1.xserver.jp`〜`ns5.xserver.jp`、apex/www/wildcardは`85.131.213.48`、公開レコードのTTLは概ね3600秒。現DNSにはMX、SPF、DKIMがあるが、独自ドメインメールを終了する方針に変更したためCloudflareへ移行しない。切り替え前に独自ドメインemailが各サービスの復旧先等に残っていないことだけを確認する。詳細は`dns-baseline.json`と`xserver-mail-dns-plan.md`。
 
 Worker Custom Domainはhostnameの全pathでWorker自身がoriginになる。そのまま切り替えると`https://calmapercorso.com/wp-content/uploads/...`もWorkerへ届き、26画像が404になる。したがってR2前の本番切り替えはCustom Domainではなく、旧Xserverをoriginに残すWorker Routeを使う。
 

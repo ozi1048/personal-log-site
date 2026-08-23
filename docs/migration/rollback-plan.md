@@ -1,6 +1,6 @@
 # Rollback plan
 
-前提: 本番切り替え後もWordPress/Xserverを少なくとも30日、backupを含めて稼働状態で保持する。WordPressの記事更新・削除・停止はしない。
+前提: 本番切り替え後もWordPress/Xserverを少なくとも30日、backupを含めて稼働状態で保持する。WordPressの記事更新・削除・停止はしない。通常運用でのXserver依存はR2移行前の既存画像配信だけとし、WordPressは一時的な緊急rollback先として保持する。メールrollback先としては扱わない。
 
 ## 即時rollback条件
 
@@ -9,7 +9,6 @@
 - productionにnoindexまたは誤canonical
 - HTTPS証明書エラー、CSS欠落、重大な本文欠落
 - GA4二重計測または全停止が解消できない
-- メールDNS障害
 
 ## Primary rollback: Worker Route解除
 
@@ -29,10 +28,12 @@ Cloudflare NS移行そのものに問題がある場合のみ、registrarでauth
 
 1. 事前保存したXserverゾーンが変更されず有効であることを確認する。
 2. registrarでCloudflare NSをXserver NSへ戻す。DNSSEC/DSがある場合は整合を先に確認する。
-3. 最大24時間を見込み、1.1.1.1、8.8.8.8、ISP resolverでNS/A/MXを確認する。
-4. `https://calmapercorso.com/`とメール送受信を確認する。
+3. 最大24時間を見込み、1.1.1.1、8.8.8.8、ISP resolverでNS/Aを確認する。
+4. `https://calmapercorso.com/`とXserver origin上の画像を確認する。
 
-メールだけに問題が出た場合は`xserver-mail-dns-plan.md`を優先する。`mail A`が`85.131.213.48`かつDNS only、MXが`mail.calmapercorso.com`、SPF/DKIMが保存値と一致することを確認する。apexがProxiedの状態でMXをapexへ戻してはいけない。旧MXへ完全rollbackする場合は、先にWorker Routeを解除してapexをDNS onlyのXserver IPへ戻す。
+Xserver NSへ戻すと保存された旧MX/SPF/DKIMが再び公開される可能性があるが、独自ドメインメールの再開を意味しない。rollbackの検証対象はWebと画像であり、メール送受信はGo/No-Go条件に含めない。問い合わせはFormspreeから外部メールアドレスへ通知するため、Web rollbackと独立して確認する。
+
+Formspree障害だけではサイト全体をWordPressへ戻さない。お問い合わせページに一時停止表示または外部フォームの代替URLを出し、Formspree復旧後に送信試験を行う。
 
 もしCustom Domainを誤って採用した場合は、Custom Domain/Worker routeを解除し、apex Aを`85.131.213.48`へ復元してから確認する。ただしPhase 4計画ではCustom Domainを採用しない。
 
@@ -48,7 +49,7 @@ GA4はWordPressのSite Kitタグへ戻る。Astro Worker route解除後、HTML�
 - 画像26/26が200
 - canonicalが本番URL、noindexなし
 - WordPress管理画面にログイン可能
-- mail送受信正常
+- Formspree通知または明示した一時代替連絡手段が利用可能
 - GA4が1回だけ発火
 - DNS resolverの結果が採用したrollback方式と一致
 

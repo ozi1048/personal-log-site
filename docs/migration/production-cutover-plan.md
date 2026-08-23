@@ -16,14 +16,14 @@ R2移行前は、`calmapercorso.com`をWorker Custom Domainにしない。Cloudf
 4. WordPress database、`wp-content`、設定ファイルをXserver側で完全backupし、復元手順を試験する。
 5. `url-mapping.csv`、WordPress sitemap、robots.txt、主要HTML、レスポンスヘッダーを保存する。
 6. Xserver DNS管理画面から**全レコードをexportまたは画面保存**する。公開照会だけで完全性を判断しない。
-7. `xserver-mail-dns-plan.md`に従い、先にXserver authoritative DNS上で明示的な`mail A`と`MX -> mail`を検証する。24時間の送受信・SPF・DKIM合格前にNS移行へ進まない。
-8. apex、www、wildcard、MX、SPF、DKIM、mail、ftp、verification TXTなどをCloudflare pending zoneへ複製する。mail/ftp/wildcardはDNS only、web origin Aだけを切り替え時にproxiedとする。Cloudflare Email Routingは有効化しない。
+7. `xserver-mail-dns-plan.md`の利用終了方針に従い、独自ドメインメールがアカウント復旧先、公開連絡先、Formspree通知先に残っていないことを確認する。必要な過去メールはXserver解約前にexportする。
+8. Cloudflare pending zoneにはapex、必要なwww、Search Console等のverification recordだけを登録する。MX、Xserver用SPF/DKIM、mail、ftp、未使用wildcardは複製せず、Cloudflare Email Routingも有効化しない。
 9. registrarのDNSSEC/DS状態を確認する。DSがある場合はCloudflare公式手順に従い、NS変更前に安全に移行する。
 10. Cloudflare production Workerをpreviewとは別名でdeployし、version IDを記録する。まだrouteを付けない。
 11. production Workerのversion preview URLで28正常URL、404、canonical、robots、画像を検証する。
 12. GA4の`G-...`をCloudflare production環境変数へ設定し、build成果物に1タグだけ存在することを確認する。
 13. Search Console propertyと所有権tokenを記録し、Cloudflare DNS/HTMLへ引き継ぐ準備をする。
-14. Formspree + Turnstileの送信先、domain制限、保持期間、プライバシー文言を承認し、production previewで試験送信する。
+14. Formspree + Turnstileの通知先を外部メールアドレスに設定し、domain制限、保持期間、プライバシー文言を承認してproduction previewで試験送信する。
 15. ロールバック担当、Cloudflare/Xserver/registrarへログインできる担当、判定時刻を決める。
 
 ### DNS TTL判断
@@ -32,9 +32,9 @@ R2移行前は、`calmapercorso.com`をWorker Custom Domainにしない。Cloudf
 
 推奨は二段階。
 
-1. 明示許可後、Xserver DNS上で`mail A`を明示化し、MXを`mail.calmapercorso.com`へ分離して先行検証する。
-2. 同一recordをCloudflare pending zoneへ複製してから、数日前にCloudflareへNSを移す。ただしWeb Aは旧WordPress origin、Worker RouteなしでWordPressを継続。
-3. NSが全resolverでCloudflareへ揃い、Web、mail A、MX、SPF、DKIM、実送受信が正常なことを24〜48時間確認してからWorker Routeを有効化。
+1. Cloudflare pending zoneへWebと所有権確認に必要なrecordだけを登録する。独自ドメインメール用recordは移行しない。
+2. 数日前にCloudflareへNSを移す。ただしWeb Aは旧WordPress origin、Worker RouteなしでWordPressと画像を継続する。
+3. NSが全resolverでCloudflareへ揃い、Web、画像、HTTPS、verification recordが正常なことを24〜48時間確認してからWorker Routeを有効化する。
 
 参考: [Cloudflare full DNS setup](https://developers.cloudflare.com/dns/zone-setups/full-setup/setup/)、[DNS TTL](https://developers.cloudflare.com/dns/manage-dns-records/reference/ttl/)
 
@@ -70,7 +70,7 @@ GA4はTag Assistantで重複タグがないことを確認し、Realtime/DebugVi
 
 ## T+30分〜48時間
 
-- Workers 4xx/5xx、旧origin画像4xx、response time、メール送受信を監視
+- Workers 4xx/5xx、旧origin画像4xx、response time、Formspree通知を監視
 - GA4 page_viewとSearch Console ownershipを確認
 - sitemap 28 URLとRSS 19件を再取得
 - WordPressは削除・停止・更新しない
@@ -85,8 +85,8 @@ Goは次をすべて満たす場合のみ。
 - production noindex 0、404だけnoindex
 - GA4 Measurement ID確定・単一発火
 - Search Console ownership維持方法確定
-- contact試験送信成功
-- DNS全record複製、`MX -> mail`、mail DNS only、SPF/DKIM pass、双方向メール送受信成功
+- Formspree + Turnstileから外部メールアドレスへの試験通知成功
+- 必要なWeb/verification DNS recordがCloudflareに登録され、旧メールrecordを移行しない方針を確認済み
 - rollback担当が旧WordPressへ戻す操作を確認済み
 
 1件でも未達ならNo-Go。本番切り替えを延期する。

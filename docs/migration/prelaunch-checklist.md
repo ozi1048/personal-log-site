@@ -39,7 +39,7 @@
 ## Contact
 
 - [x] 3方式の比較とFormspree + Turnstile推奨を決定
-- [ ] Formspree account/form IDと通知先emailを決定
+- [ ] Formspree account/form IDと外部通知先emailを決定
 - [ ] Turnstile site/secret key、allowed hostname、domain制限を設定
 - [ ] 保持期間・処理委託先をプライバシーポリシーへ反映
 - [ ] production candidateで正常送信、validation、spam、失敗表示を試験
@@ -58,18 +58,17 @@
 
 - [x] 公開DNS baselineとTTLを保存
 - [x] 現NSがXserver、origin Aが`85.131.213.48`と確認
-- [x] wildcard、MX、SPF、`default._domainkey` DKIM、Xserver SMTP証明書を読み取り検証
-- [x] Xserverメール分離案を`xserver-mail-dns-plan.md`へ文書化
+- [x] wildcard、MX、SPF、`default._domainkey` DKIMを現DNSの履歴として保存
+- [x] 独自ドメインメールを終了し、メールrecordをCloudflareへ移行しない方針を文書化
 - [x] 3600秒TTLは事前短縮必須でないと判断
 - [ ] Xserver管理画面から完全なDNS zoneをexport
-- [ ] Xserverサポート/パネルで`MX -> mail.calmapercorso.com`利用可を最終確認
-- [ ] Xserver DNSで明示的なmail Aを作成し、MX分離を先行テスト
-- [ ] 外部との双方向送受信、SPF=pass、DKIM=passを24時間確認
-- [ ] Cloudflare pending zoneへ全recordを複製
-- [ ] Cloudflareのmail/ftp/wildcardをDNS only、Email Routingを無効に設定
-- [ ] Cloudflare assigned NSへの直接queryでMX/mail/SPF/DKIM一致
+- [ ] 独自ドメインemailが各サービスのログイン・復旧先・公開連絡先に残っていないことを確認
+- [ ] Cloudflare pending zoneへ必要なWeb/verification recordだけを登録
+- [ ] MX、Xserver用SPF/DKIM、mail、ftp、未使用wildcardをCloudflareへ移行していないことを確認
+- [ ] Cloudflare Email Routingが無効であることを確認
+- [ ] Cloudflare assigned NSへの直接queryでWeb/verification recordを確認
 - [ ] DNSSEC/DS状態をregistrarで確認
-- [ ] Cloudflare NSへ変更後、Worker routeなしでWordPress/Web/メールを24〜48時間確認
+- [ ] Cloudflare NSへ変更後、Worker routeなしでWordPress/Web/画像を24〜48時間確認
 - [ ] production Workerを別名でdeployしversion固定
 - [ ] `/wp-content/uploads/*` no-script routeを先に設定
 - [ ] `calmapercorso.com/*` production Worker routeを最後に設定
@@ -82,7 +81,7 @@
 - [ ] rollback担当と判断基準を共有
 - [ ] route解除でWordPressへ戻ることを事前確認
 - [ ] WordPressを切り替え後30日以上停止しない
-- [ ] R2移行・30日監視・参照0件までWordPressを削除しない
+- [ ] R2移行・30日監視・参照0件までWordPress/Xserverを停止・解約しない
 
 ## Final commands
 
