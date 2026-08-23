@@ -1,0 +1,26 @@
+[
+  {
+    "id": 6,
+    "count": 6,
+    "name": "借　金",
+    "slug": "money"
+  },
+  {
+    "id": 1,
+    "count": 0,
+    "name": "未分類",
+    "slug": "uncategorized"
+  },
+  {
+    "id": 8,
+    "count": 5,
+    "name": "移　住",
+    "slug": "relocation"
+  },
+  {
+    "id": 5,
+    "count": 13,
+    "name": "転　職",
+    "slug": "career"
+  }
+]

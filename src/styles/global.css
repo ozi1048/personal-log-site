@@ -133,6 +133,14 @@ button, input, textarea { font: inherit; }
 .prose p { margin: 0 0 1.9em; }
 .prose blockquote { margin: 2.5em 0; padding: 24px 28px; border: 1px solid var(--line); background: rgb(251 249 244 / 55%); color: var(--muted); }
 .prose img { margin: 2.6em auto; border-radius: 2px; }
+.prose ul, .prose ol { margin: 0 0 1.9em; padding-left: 1.5em; }
+.prose li + li { margin-top: .45em; }
+.prose table { width: 100%; margin: 2.6em 0; border-collapse: collapse; font-family: var(--sans); font-size: .82rem; line-height: 1.65; }
+.prose th, .prose td { min-width: 8.5rem; padding: 12px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.prose th { background: var(--paper-deep); font-weight: 700; }
+.prose figure { margin: 2.6em 0; }
+.prose figure img { margin-bottom: .8em; }
+.prose figcaption { color: var(--muted); font-family: var(--sans); font-size: .75rem; line-height: 1.7; text-align: center; }
 .preview-note { padding: 22px 24px; border-left: 3px solid var(--rust); background: var(--paper-deep); font-family: var(--sans); font-size: .84rem; }
 
 .article-navigation { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin: 90px 0; background: var(--line); border: 1px solid var(--line); }
@@ -196,6 +204,7 @@ button, input, textarea { font: inherit; }
   .post-cover { width: 100%; height: 62vw; margin-top: 42px; }
   .post-content { margin-top: 58px; }
   .prose { font-size: 1rem; line-height: 2.05; }
+  .prose table { display: block; max-width: 100%; overflow-x: auto; white-space: nowrap; }
   .article-navigation { grid-template-columns: 1fr; }
   .article-navigation > a:last-child { text-align: left; }
   .footer-grid { grid-template-columns: 1fr; }
