@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { CATEGORIES } from '../../config/site';
+---
+
+<BaseLayout title="カテゴリ" description="転職、借金、移住の3テーマから過去ログを探せます。">
+  <header class="page-hero shell">
+    <p class="eyebrow">THREE THREADS</p>
+    <h1>カテゴリ</h1>
+    <p>ひとつの出来事が、仕事とお金、移住の複数テーマにまたがる場合があります。</p>
+  </header>
+  <section class="section">
+    <div class="shell category-grid">
+      {Object.values(CATEGORIES).map((category, index) => (
+        <a class="category-panel" href={`/category/${category.slug}/`} data-marker={category.marker}>
+          <small>0{index + 1} / {category.marker}</small>
+          <h2>{category.displayLabel}</h2>
+          <p>{category.description}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

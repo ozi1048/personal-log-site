@@ -1,0 +1,22 @@
+---
+import { CATEGORIES, SITE } from '../config/site';
+---
+
+<header class="site-header">
+  <div class="shell header-inner">
+    <a class="brand" href="/" aria-label={`${SITE.name} トップ`}>
+      <span class="brand-mark" aria-hidden="true">cp</span>
+      <span>
+        <strong>{SITE.name}</strong>
+        <small>PAST LOG / 01—19</small>
+      </span>
+    </a>
+    <nav aria-label="メインナビゲーション">
+      <a href="/articles/">記録一覧</a>
+      {Object.values(CATEGORIES).map((category) => (
+        <a href={`/category/${category.slug}/`}>{category.label}</a>
+      ))}
+      <a href="/プロフィール/">プロフィール</a>
+    </nav>
+  </div>
+</header>

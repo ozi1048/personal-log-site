@@ -1,0 +1,66 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import Timeline from '../components/Timeline.astro';
+import { CATEGORIES } from '../config/site';
+import { byNewest, byLogNumber, publishedPosts } from '../lib/content';
+
+const posts = publishedPosts(await getCollection('posts'));
+const newest = [...posts].sort(byNewest);
+const timeline = [...posts].sort(byLogNumber);
+---
+
+<BaseLayout>
+  <section class="hero">
+    <div class="shell hero-grid">
+      <div>
+        <p class="eyebrow">A PERSONAL ARCHIVE OF WRONG TURNS</p>
+        <h1>過去は、<br /><em>失敗</em>だけでは<br />終わらない。</h1>
+      </div>
+      <div class="hero-copy">
+        <p>転職、借金、移住。<br />うまくいかなかった選択を、起きた順に読み返すための個人記録。</p>
+        <div class="hero-index">LOG 01 — 19 / 2026</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="section-heading">
+        <div><p class="eyebrow">THREE THREADS</p><h2>3つのテーマから読む</h2></div>
+        <a class="text-link" href="/category/">カテゴリ一覧 →</a>
+      </div>
+      <div class="category-grid">
+        {Object.values(CATEGORIES).map((category, index) => (
+          <a class="category-panel" href={`/category/${category.slug}/`} data-marker={category.marker}>
+            <small>0{index + 1} / {category.marker}</small>
+            <h2>{category.displayLabel}</h2>
+            <p>{category.description}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="section-heading">
+        <div><p class="eyebrow">LATEST LOGS</p><h2>新しい記録</h2></div>
+        <a class="text-link" href="/articles/">すべての記録 →</a>
+      </div>
+      <div class="article-grid">
+        {newest.map((post, index) => <ArticleCard post={post} featured={index === 0} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell-reading">
+      <div class="section-heading">
+        <div><p class="eyebrow">READ IN ORDER</p><h2>#1から時系列で読む</h2></div>
+      </div>
+      <Timeline posts={timeline} />
+    </div>
+  </section>
+</BaseLayout>

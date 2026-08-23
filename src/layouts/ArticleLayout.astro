@@ -1,0 +1,97 @@
+---
+import type { Post } from '../lib/content';
+import { formatDate } from '../lib/content';
+import { CATEGORIES } from '../config/site';
+import { articleSchema, breadcrumbSchema, canonicalFor } from '../lib/seo';
+import { resolveImageUrl } from '../lib/images';
+import BaseLayout from './BaseLayout.astro';
+import CategoryPills from '../components/CategoryPills.astro';
+import RemoteImage from '../components/RemoteImage.astro';
+import ArticleNavigation from '../components/ArticleNavigation.astro';
+import Timeline from '../components/Timeline.astro';
+
+interface Props {
+  post: Post;
+  previous?: Post;
+  next?: Post;
+  related: Post[];
+  timeline: Post[];
+}
+
+const { post, previous, next, related, timeline } = Astro.props;
+const pageUrl = canonicalFor(`/${post.data.slug}/`, post.data.canonical);
+const primaryCategory = CATEGORIES[post.data.categories[0]];
+const schemas = [
+  articleSchema({
+    title: post.data.title,
+    description: post.data.description,
+    url: pageUrl,
+    image: resolveImageUrl(post.data.featuredImage),
+    publishedAt: post.data.publishedAt,
+    updatedAt: post.data.updatedAt,
+  }),
+  breadcrumbSchema([
+    { name: 'ホーム', url: canonicalFor('/') },
+    { name: primaryCategory.label, url: canonicalFor(`/category/${primaryCategory.slug}/`) },
+    { name: post.data.title, url: pageUrl },
+  ]),
+];
+---
+
+<BaseLayout
+  title={post.data.title.replace(/^【#\d+】\s*/, '')}
+  description={post.data.description}
+  image={post.data.featuredImage}
+  canonical={post.data.canonical}
+  type="article"
+  schema={schemas}
+>
+  <article class="post-page">
+    <header class="post-hero shell-reading">
+      <p class="post-sequence"><span>PAST LOG</span> 記録 #{String(post.data.logNumber).padStart(2, '0')}</p>
+      <CategoryPills categories={post.data.categories} />
+      <h1>{post.data.title.replace(/^【#\d+】\s*/, '')}</h1>
+      <p class="post-lead">{post.data.description}</p>
+      <div class="post-dates">
+        <span>公開 <time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt)}</time></span>
+        {post.data.updatedAt.getTime() !== post.data.publishedAt.getTime() && (
+          <span>更新 <time datetime={post.data.updatedAt.toISOString()}>{formatDate(post.data.updatedAt)}</time></span>
+        )}
+      </div>
+    </header>
+
+    <div class="post-cover shell-wide">
+      <RemoteImage src={post.data.featuredImage} alt={post.data.title} loading="eager" />
+      <span aria-hidden="true">#{String(post.data.logNumber).padStart(2, '0')}</span>
+    </div>
+
+    <div class="post-content shell-reading prose">
+      <slot />
+    </div>
+
+    <div class="shell-reading">
+      <ArticleNavigation {previous} {next} />
+    </div>
+
+    {related.length > 0 && (
+      <section class="related-section shell-reading">
+        <div class="section-heading compact">
+          <div><p class="eyebrow">SAME CATEGORY</p><h2>同じテーマの記録</h2></div>
+        </div>
+        <ul>
+          {related.map((item) => (
+            <li><a href={`/${item.data.slug}/`}><span>#{item.data.logNumber}</span>{item.data.title.replace(/^【#\d+】\s*/, '')}</a></li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <section class="timeline-section shell-reading">
+      <div class="section-heading compact">
+        <div><p class="eyebrow">CHRONOLOGY</p><h2>時系列で追う</h2></div>
+        <a class="text-link" href="/articles/">全記録を見る →</a>
+      </div>
+      <Timeline posts={timeline} />
+    </section>
+  </article>
+</BaseLayout>

@@ -1,0 +1,23 @@
+---
+import { getCollection, render } from 'astro:content';
+import ArticleLayout from '../layouts/ArticleLayout.astro';
+import { adjacentPosts, byLogNumber, publishedPosts } from '../lib/content';
+
+export async function getStaticPaths() {
+  const posts = publishedPosts(await getCollection('posts'));
+  return posts.map((post) => ({ params: { slug: post.data.slug }, props: { post, posts } }));
+}
+
+const { post, posts } = Astro.props;
+const { Content } = await render(post);
+const { previous, next } = adjacentPosts(posts, post);
+const related = posts
+  .filter((candidate) => candidate.id !== post.id && candidate.data.categories.some((category) => post.data.categories.includes(category)))
+  .sort(byLogNumber)
+  .slice(0, 4);
+const timeline = [...posts].sort(byLogNumber);
+---
+
+<ArticleLayout {post} {previous} {next} {related} {timeline}>
+  <Content />
+</ArticleLayout>

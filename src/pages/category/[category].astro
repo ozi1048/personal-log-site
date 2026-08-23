@@ -1,0 +1,35 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { CATEGORIES, type CategorySlug } from '../../config/site';
+import { byNewest, publishedPosts } from '../../lib/content';
+
+export function getStaticPaths() {
+  return Object.values(CATEGORIES).map((category) => ({
+    params: { category: category.slug },
+    props: { categorySlug: category.slug },
+  }));
+}
+
+interface Props { categorySlug: CategorySlug }
+const { categorySlug } = Astro.props;
+const category = CATEGORIES[categorySlug];
+const posts = publishedPosts(await getCollection('posts'))
+  .filter((post) => post.data.categories.includes(categorySlug))
+  .sort(byNewest);
+---
+
+<BaseLayout title={`${category.label}の記録`} description={category.description}>
+  <header class="page-hero shell">
+    <p class="eyebrow">CATEGORY / {category.marker}</p>
+    <h1>{category.displayLabel}</h1>
+    <p>{category.description}</p>
+    <p class="count-label">{posts.length} SAMPLE LOGS</p>
+  </header>
+  <section class="section">
+    <div class="shell article-grid">
+      {posts.map((post) => <ArticleCard post={post} />)}
+    </div>
+  </section>
+</BaseLayout>

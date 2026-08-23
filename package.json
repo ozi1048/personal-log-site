@@ -1,0 +1,24 @@
+{
+  "name": "personal-log-site",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
+    "build": "ASTRO_TELEMETRY_DISABLED=1 astro check && ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "preview": "wrangler dev",
+    "test": "node scripts/test-build.mjs",
+    "check": "ASTRO_TELEMETRY_DISABLED=1 astro check",
+    "wrangler": "WRANGLER_LOG_PATH=.wrangler/logs wrangler",
+    "deploy": "pnpm build && WRANGLER_LOG_PATH=.wrangler/logs wrangler deploy"
+  },
+  "dependencies": {
+    "@astrojs/rss": "^4.0.15",
+    "astro": "^6.0.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.6",
+    "typescript": "^5.9.2",
+    "wrangler": "^4.125.0"
+  }
+}

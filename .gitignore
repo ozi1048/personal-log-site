@@ -1,0 +1,9 @@
+node_modules/
+.pnpm-store/
+.wrangler/
+.astro/
+dist/
+.dev.vars
+.env
+.env.*
+!.env.example

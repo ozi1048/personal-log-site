@@ -1,0 +1,26 @@
+---
+import type { Post } from '../lib/content';
+import { postPath } from '../lib/content';
+
+interface Props {
+  previous?: Post;
+  next?: Post;
+}
+
+const { previous, next } = Astro.props;
+---
+
+<nav class="article-navigation" aria-label="前後の記録">
+  {previous ? (
+    <a href={postPath(previous)} rel="prev">
+      <small>← 前の記録　#{previous.data.logNumber}</small>
+      <span>{previous.data.title.replace(/^【#\d+】\s*/, '')}</span>
+    </a>
+  ) : <span />}
+  {next ? (
+    <a href={postPath(next)} rel="next">
+      <small>次の記録　#{next.data.logNumber} →</small>
+      <span>{next.data.title.replace(/^【#\d+】\s*/, '')}</span>
+    </a>
+  ) : <span />}
+</nav>

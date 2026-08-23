@@ -1,0 +1,22 @@
+---
+import type { Post } from '../lib/content';
+import { formatDate, postPath } from '../lib/content';
+
+interface Props {
+  posts: Post[];
+}
+
+const { posts } = Astro.props;
+---
+
+<ol class="timeline">
+  {posts.map((post) => (
+    <li>
+      <a href={postPath(post)}>
+        <span class="timeline-number">#{String(post.data.logNumber).padStart(2, '0')}</span>
+        <span class="timeline-title">{post.data.title.replace(/^【#\d+】\s*/, '')}</span>
+        <time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt)}</time>
+      </a>
+    </li>
+  ))}
+</ol>

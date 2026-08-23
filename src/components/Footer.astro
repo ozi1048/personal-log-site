@@ -1,0 +1,24 @@
+---
+import { SITE } from '../config/site';
+---
+
+<footer class="site-footer">
+  <div class="shell footer-grid">
+    <div>
+      <p class="eyebrow">PERSONAL ARCHIVE</p>
+      <p class="footer-title">{SITE.name}</p>
+      <p>{SITE.tagline}</p>
+    </div>
+    <nav aria-label="フッターナビゲーション">
+      <a href="/articles/">記録一覧</a>
+      <a href="/プロフィール/">プロフィール</a>
+      <a href="/privacy-policy-2/">プライバシー</a>
+      <a href="/お問い合わせ/">お問い合わせ</a>
+      <a href="/rss.xml">RSS</a>
+    </nav>
+  </div>
+  <div class="shell footer-bottom">
+    <small>© {new Date().getFullYear()} {SITE.name}</small>
+    <small>Preview — noindex</small>
+  </div>
+</footer>

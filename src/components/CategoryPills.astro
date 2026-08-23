@@ -1,0 +1,17 @@
+---
+import { CATEGORIES, type CategorySlug } from '../config/site';
+
+interface Props {
+  categories: CategorySlug[];
+}
+
+const { categories } = Astro.props;
+---
+
+<div class="category-pills" aria-label="カテゴリ">
+  {categories.map((slug) => (
+    <a class={`category-pill category-${slug}`} href={`/category/${slug}/`}>
+      {CATEGORIES[slug].label}
+    </a>
+  ))}
+</div>

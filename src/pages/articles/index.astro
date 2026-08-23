@@ -1,0 +1,22 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { byNewest, publishedPosts } from '../../lib/content';
+
+const posts = publishedPosts(await getCollection('posts')).sort(byNewest);
+---
+
+<BaseLayout title="記録一覧" description="転職、借金、移住について書いた過去ログを、新しい順に一覧できます。">
+  <header class="page-hero shell">
+    <p class="eyebrow">ALL PAST LOGS</p>
+    <h1>記録一覧</h1>
+    <p>出来事は順番に起きたけれど、読む順番は自由です。現在はPhase 2のサンプル記事を掲載しています。</p>
+    <p class="count-label">{posts.length} SAMPLE LOGS / 19 TOTAL</p>
+  </header>
+  <section class="section">
+    <div class="shell article-grid">
+      {posts.map((post) => <ArticleCard post={post} />)}
+    </div>
+  </section>
+</BaseLayout>
