@@ -16,14 +16,15 @@ R2移行前は、`calmapercorso.com`をWorker Custom Domainにしない。Cloudf
 4. WordPress database、`wp-content`、設定ファイルをXserver側で完全backupし、復元手順を試験する。
 5. `url-mapping.csv`、WordPress sitemap、robots.txt、主要HTML、レスポンスヘッダーを保存する。
 6. Xserver DNS管理画面から**全レコードをexportまたは画面保存**する。公開照会だけで完全性を判断しない。
-7. apex、www、MX、SPF、mail、ftp、verification TXTなどをCloudflare pending zoneへ複製する。mail/ftpはDNS only、web origin Aは切り替え時にproxiedとする。
-8. registrarのDNSSEC/DS状態を確認する。DSがある場合はCloudflare公式手順に従い、NS変更前に安全に移行する。
-9. Cloudflare production Workerをpreviewとは別名でdeployし、version IDを記録する。まだrouteを付けない。
-10. production Workerのversion preview URLで28正常URL、404、canonical、robots、画像を検証する。
-11. GA4の`G-...`をCloudflare production環境変数へ設定し、build成果物に1タグだけ存在することを確認する。
-12. Search Console propertyと所有権tokenを記録し、Cloudflare DNS/HTMLへ引き継ぐ準備をする。
-13. Formspree + Turnstileの送信先、domain制限、保持期間、プライバシー文言を承認し、production previewで試験送信する。
-14. ロールバック担当、Cloudflare/Xserver/registrarへログインできる担当、判定時刻を決める。
+7. `xserver-mail-dns-plan.md`に従い、先にXserver authoritative DNS上で明示的な`mail A`と`MX -> mail`を検証する。24時間の送受信・SPF・DKIM合格前にNS移行へ進まない。
+8. apex、www、wildcard、MX、SPF、DKIM、mail、ftp、verification TXTなどをCloudflare pending zoneへ複製する。mail/ftp/wildcardはDNS only、web origin Aだけを切り替え時にproxiedとする。Cloudflare Email Routingは有効化しない。
+9. registrarのDNSSEC/DS状態を確認する。DSがある場合はCloudflare公式手順に従い、NS変更前に安全に移行する。
+10. Cloudflare production Workerをpreviewとは別名でdeployし、version IDを記録する。まだrouteを付けない。
+11. production Workerのversion preview URLで28正常URL、404、canonical、robots、画像を検証する。
+12. GA4の`G-...`をCloudflare production環境変数へ設定し、build成果物に1タグだけ存在することを確認する。
+13. Search Console propertyと所有権tokenを記録し、Cloudflare DNS/HTMLへ引き継ぐ準備をする。
+14. Formspree + Turnstileの送信先、domain制限、保持期間、プライバシー文言を承認し、production previewで試験送信する。
+15. ロールバック担当、Cloudflare/Xserver/registrarへログインできる担当、判定時刻を決める。
 
 ### DNS TTL判断
 
@@ -31,8 +32,9 @@ R2移行前は、`calmapercorso.com`をWorker Custom Domainにしない。Cloudf
 
 推奨は二段階。
 
-1. 明示許可後、数日前にCloudflareへNSを移す。ただしAは旧WordPressのまま、Worker RouteなしでWordPressを継続。
-2. NSが全resolverでCloudflareへ揃い、webとmailが正常なことを確認してからWorker Routeを有効化。
+1. 明示許可後、Xserver DNS上で`mail A`を明示化し、MXを`mail.calmapercorso.com`へ分離して先行検証する。
+2. 同一recordをCloudflare pending zoneへ複製してから、数日前にCloudflareへNSを移す。ただしWeb Aは旧WordPress origin、Worker RouteなしでWordPressを継続。
+3. NSが全resolverでCloudflareへ揃い、Web、mail A、MX、SPF、DKIM、実送受信が正常なことを24〜48時間確認してからWorker Routeを有効化。
 
 参考: [Cloudflare full DNS setup](https://developers.cloudflare.com/dns/zone-setups/full-setup/setup/)、[DNS TTL](https://developers.cloudflare.com/dns/manage-dns-records/reference/ttl/)
 
@@ -84,8 +86,7 @@ Goは次をすべて満たす場合のみ。
 - GA4 Measurement ID確定・単一発火
 - Search Console ownership維持方法確定
 - contact試験送信成功
-- DNS全record複製とmail送受信成功
+- DNS全record複製、`MX -> mail`、mail DNS only、SPF/DKIM pass、双方向メール送受信成功
 - rollback担当が旧WordPressへ戻す操作を確認済み
 
 1件でも未達ならNo-Go。本番切り替えを延期する。
-

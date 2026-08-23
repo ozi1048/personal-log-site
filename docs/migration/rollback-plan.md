@@ -32,6 +32,8 @@ Cloudflare NS移行そのものに問題がある場合のみ、registrarでauth
 3. 最大24時間を見込み、1.1.1.1、8.8.8.8、ISP resolverでNS/A/MXを確認する。
 4. `https://calmapercorso.com/`とメール送受信を確認する。
 
+メールだけに問題が出た場合は`xserver-mail-dns-plan.md`を優先する。`mail A`が`85.131.213.48`かつDNS only、MXが`mail.calmapercorso.com`、SPF/DKIMが保存値と一致することを確認する。apexがProxiedの状態でMXをapexへ戻してはいけない。旧MXへ完全rollbackする場合は、先にWorker Routeを解除してapexをDNS onlyのXserver IPへ戻す。
+
 もしCustom Domainを誤って採用した場合は、Custom Domain/Worker routeを解除し、apex Aを`85.131.213.48`へ復元してから確認する。ただしPhase 4計画ではCustom Domainを採用しない。
 
 ## Search Console / GA4
@@ -51,4 +53,3 @@ GA4はWordPressのSite Kitタグへ戻る。Astro Worker route解除後、HTML�
 - DNS resolverの結果が採用したrollback方式と一致
 
 Cloudflare Worker version自体の不具合で、domain routingは正常な場合は`wrangler rollback`またはDashboardのDeploymentsから直前安定versionへ戻すこともできる。参考: [Workers rollbacks](https://developers.cloudflare.com/workers/versions-and-deployments/rollbacks/)
-

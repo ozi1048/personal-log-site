@@ -128,7 +128,7 @@ R2 StandardのFree tierは10 GB-month、Class A 100万/月、Class B 1000万/月
 
 ## DNS / 画像継続に関する重要事項
 
-現在のauthoritative NSは`ns1.xserver.jp`〜`ns5.xserver.jp`、apex/www/mail/ftpは`85.131.213.48`、公開レコードのTTLは概ね3600秒。DS、CAA、DMARCは公開照会では確認できなかった。詳細は`dns-baseline.json`。
+現在のauthoritative NSは`ns1.xserver.jp`〜`ns5.xserver.jp`、apex/www/wildcardは`85.131.213.48`、公開レコードのTTLは概ね3600秒。MXはapex自身を指すため、apexをCloudflare proxy化する前にメール配送先を分離する必要がある。推奨候補はDNS onlyの`mail.calmapercorso.com -> 85.131.213.48`と、`MX @ -> mail.calmapercorso.com`。SPF、`default._domainkey` DKIMもCloudflareへ完全複製する。詳細は`dns-baseline.json`と`xserver-mail-dns-plan.md`。
 
 Worker Custom Domainはhostnameの全pathでWorker自身がoriginになる。そのまま切り替えると`https://calmapercorso.com/wp-content/uploads/...`もWorkerへ届き、26画像が404になる。したがってR2前の本番切り替えはCustom Domainではなく、旧Xserverをoriginに残すWorker Routeを使う。
 
@@ -147,4 +147,3 @@ Cloudflare Routesは既存originの前段で動き、より具体的なno-script
 - `pnpm audit:prelaunch`: 成功
 - preview deploy: 成功、version `0bc3a6ca-a927-4e66-8623-b9256de5055a`
 - DNS/WordPress本番変更: 0件
-

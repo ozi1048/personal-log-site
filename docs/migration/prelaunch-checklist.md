@@ -58,11 +58,18 @@
 
 - [x] 公開DNS baselineとTTLを保存
 - [x] 現NSがXserver、origin Aが`85.131.213.48`と確認
+- [x] wildcard、MX、SPF、`default._domainkey` DKIM、Xserver SMTP証明書を読み取り検証
+- [x] Xserverメール分離案を`xserver-mail-dns-plan.md`へ文書化
 - [x] 3600秒TTLは事前短縮必須でないと判断
 - [ ] Xserver管理画面から完全なDNS zoneをexport
+- [ ] Xserverサポート/パネルで`MX -> mail.calmapercorso.com`利用可を最終確認
+- [ ] Xserver DNSで明示的なmail Aを作成し、MX分離を先行テスト
+- [ ] 外部との双方向送受信、SPF=pass、DKIM=passを24時間確認
 - [ ] Cloudflare pending zoneへ全recordを複製
+- [ ] Cloudflareのmail/ftp/wildcardをDNS only、Email Routingを無効に設定
+- [ ] Cloudflare assigned NSへの直接queryでMX/mail/SPF/DKIM一致
 - [ ] DNSSEC/DS状態をregistrarで確認
-- [ ] Cloudflare NSへ変更後、Worker routeなしでWordPress/web/mailを確認
+- [ ] Cloudflare NSへ変更後、Worker routeなしでWordPress/Web/メールを24〜48時間確認
 - [ ] production Workerを別名でdeployしversion固定
 - [ ] `/wp-content/uploads/*` no-script routeを先に設定
 - [ ] `calmapercorso.com/*` production Worker routeを最後に設定
@@ -88,4 +95,3 @@ pnpm audit:prelaunch
 ```
 
 すべて成功し、上の`[ ]`が完了し、明示的な本番切り替え許可が出た場合だけ`production-cutover-plan.md`を実行する。
-

@@ -4,13 +4,17 @@
   "records": [
     { "name": "calmapercorso.com", "type": "A", "value": "85.131.213.48", "observedTtlSeconds": 3284 },
     { "name": "www.calmapercorso.com", "type": "A", "value": "85.131.213.48", "observedTtlSeconds": 3600 },
-    { "name": "mail.calmapercorso.com", "type": "A", "value": "85.131.213.48", "observedTtlSeconds": 3600 },
+    { "name": "*.calmapercorso.com", "type": "A", "value": "85.131.213.48", "observedTtlSeconds": 3600, "verification": "random-phase4-mail-check.calmapercorso.com" },
+    { "name": "mail.calmapercorso.com", "type": "A", "value": "85.131.213.48", "observedTtlSeconds": 3600, "note": "public DNS cannot distinguish explicit record from wildcard answer" },
     { "name": "ftp.calmapercorso.com", "type": "A", "value": "85.131.213.48", "observedTtlSeconds": 3600 },
     { "name": "calmapercorso.com", "type": "MX", "priority": 0, "value": "calmapercorso.com", "observedTtlSeconds": 3600 },
     { "name": "calmapercorso.com", "type": "TXT", "value": "v=spf1 +a:sv16667.xserver.jp +a:calmapercorso.com +mx include:spf.sender.xserver.jp ~all", "observedTtlSeconds": 3600 },
+    { "name": "default._domainkey.calmapercorso.com", "type": "TXT", "value": "v=DKIM1; k=rsa; p=<public key observed; copy exact value from Xserver panel/export>", "observedTtlSeconds": 3600 },
+    { "name": "sv16667.xserver.jp", "type": "A", "value": "85.131.213.48", "observedTtlSeconds": 2553 },
     { "name": "calmapercorso.com", "type": "NS", "value": "ns1.xserver.jp ... ns5.xserver.jp", "observedTtlSeconds": 3600 },
     { "name": "calmapercorso.com", "type": "SOA", "value": "ns1.xserver.jp root.xserver.jp 0 10800 3600 604800 3600", "observedTtlSeconds": 3600 }
   ],
-  "notObserved": ["AAAA", "DS/DNSSEC", "CAA", "_dmarc TXT"],
+  "notObserved": ["AAAA", "DS/DNSSEC", "CAA", "_dmarc TXT", "_mta-sts TXT", "_smtp._tls TXT"],
+  "smtpTls": { "endpoint": "85.131.213.48:25", "sni": "mail.calmapercorso.com", "certificateSubject": "CN=*.xserver.jp", "certificateSans": ["*.xserver.jp", "xserver.jp"] },
   "cutoverNote": "Export the complete Xserver DNS zone before changing nameservers. Public enumeration cannot prove that this is the complete record set."
 }
