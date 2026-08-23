@@ -21,7 +21,7 @@ R2移行前は、`calmapercorso.com`をWorker Custom Domainにしない。Cloudf
 9. registrarのDNSSEC/DS状態を確認する。DSがある場合はCloudflare公式手順に従い、NS変更前に安全に移行する。
 10. Cloudflare production Workerをpreviewとは別名でdeployし、version IDを記録する。まだrouteを付けない。
 11. production Workerのversion preview URLで28正常URL、404、canonical、robots、画像を検証する。
-12. GA4の`G-...`をCloudflare production環境変数へ設定し、build成果物に1タグだけ存在することを確認する。
+12. GA4の`G-S7GS8NFDWG`をCloudflare production環境変数`PUBLIC_GA_MEASUREMENT_ID`へ設定し、build成果物に1タグだけ存在することを確認する。ソースコードとpreview環境には設定しない。
 13. Search Console propertyと所有権tokenを記録し、Cloudflare DNS/HTMLへ引き継ぐ準備をする。
 14. Formspree + Turnstileの通知先を外部メールアドレスに設定し、domain制限、保持期間、プライバシー文言を承認してproduction previewで試験送信する。
 15. ロールバック担当、Cloudflare/Xserver/registrarへログインできる担当、判定時刻を決める。
@@ -83,7 +83,7 @@ Goは次をすべて満たす場合のみ。
 - 23/23既存pathがproduction candidateで200
 - 画像26/26がRoute迂回で200
 - production noindex 0、404だけnoindex
-- GA4 Measurement ID確定・単一発火
+- GA4 Measurement ID `G-S7GS8NFDWG`のproduction設定・単一発火
 - Search Console ownership維持方法確定
 - Formspree + Turnstileから外部メールアドレスへの試験通知成功
 - 必要なWeb/verification DNS recordがCloudflareに登録され、旧メールrecordを移行しない方針を確認済み

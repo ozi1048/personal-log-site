@@ -14,7 +14,7 @@ Astroのコンテンツ・URL・SEO実装は本番切り替え候補として合
 
 1. Cloudflareへ登録するWeb/verification DNS recordの確定とDNSSEC/DS確認
 2. 同一ドメインのWordPress画像を維持するWorker Route除外設定の事前テスト
-3. 実際のGA4 Measurement IDとSearch Console所有権方式の確認
+3. Search Console所有権方式の確認と、確定したGA4 Measurement IDのproduction設定・受信試験
 4. お問い合わせの外部メール通知先とFormspree/Turnstile設定の決定・プライバシー文言更新
 
 ## 全ページ検証
@@ -96,17 +96,17 @@ sitemap 28 URLの内訳は、トップ1、記事19、記事一覧1、カテゴ�
 
 ## GA4 / Search Console
 
-公開HTMLで確認できるのはSite KitのGoogle tag ID `GT-WKP7ZVTQ`だけで、GA4 Measurement ID (`G-...`) は確定できない。Search Console verification metaも公開HTMLにはない。
+GA4 Measurement IDは管理情報から`G-S7GS8NFDWG`と確定した。公開HTMLで確認済みのSite Kit Google tag ID `GT-WKP7ZVTQ`とは役割が異なるため、Cloudflare版にはMeasurement IDを使用する。Search Console verification metaは公開HTMLにはない。
 
 切り替え前にWordPress管理画面の Site Kit > Settings > Connected Services で次を記録する。
 
-- Analytics account / property / web data stream / `G-...` Measurement ID
+- Analytics account / property / web data streamと、Measurement IDが`G-S7GS8NFDWG`であること
 - 「Place Google Analytics code」の状態と、同じタグを別プラグインが出していないか
 - Search Console propertyがDomainか`https://calmapercorso.com/` URL-prefixか
 - verified ownerと所有権確認方式（DNS TXT、HTML tag/file、GA等）
 - 現在のsitemap送信先と最終取得状態
 
-Cloudflare版はGitHub/Cloudflare環境変数`PUBLIC_GA_MEASUREMENT_ID`へ`G-...`だけを設定する。`GT-WKP7ZVTQ`をMeasurement IDとして代用しない。production build後、Tag AssistantとGA4 Realtime/DebugViewでpage_viewを1回だけ送ることを確認する。Search Consoleは同一domain・同一URL移行なのでChange of Addressは使わず、既存propertyを維持し、所有権tokenをCloudflare DNSまたはHTMLへ引き継ぐ。
+Cloudflare版はproduction環境変数`PUBLIC_GA_MEASUREMENT_ID`へ`G-S7GS8NFDWG`を設定する。ソースコードやpreview環境へ直書きせず、`GT-WKP7ZVTQ`をMeasurement IDとして代用しない。production build後、Tag AssistantとGA4 Realtime/DebugViewでpage_viewを1回だけ送ることを確認する。Search Consoleは同一domain・同一URL移行なのでChange of Addressは使わず、既存propertyを維持し、所有権tokenをCloudflare DNSまたはHTMLへ引き継ぐ。
 
 参考: [Google tag setup](https://developers.google.com/tag-platform/gtagjs)、[Site Kit Analytics](https://sitekit.withgoogle.com/documentation/supported-services/analytics/)、[Site Kit Search Console](https://sitekit.withgoogle.com/documentation/supported-services/search-console/)、[Search Console ownership verification](https://support.google.com/webmasters/answer/9008080)
 

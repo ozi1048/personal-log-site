@@ -48,8 +48,9 @@
 
 - [x] Google tag `GT-WKP7ZVTQ`の存在確認
 - [x] GAタグの環境変数・production限定出力を検証
-- [ ] Site KitでGA4 account/property/stream/`G-...`を記録
-- [ ] `PUBLIC_GA_MEASUREMENT_ID`へ実IDを設定
+- [x] GA4 Measurement ID `G-S7GS8NFDWG`を記録
+- [ ] Site Kitで接続中のaccount/property/web streamが`G-S7GS8NFDWG`と一致することを確認
+- [ ] Cloudflare productionの`PUBLIC_GA_MEASUREMENT_ID`へ`G-S7GS8NFDWG`を設定
 - [ ] Tag Assistantで単一発火、GA4 Realtime/DebugViewで受信確認
 - [ ] Search Console property type、owner、verification方式を記録
 - [ ] DNS/HTML verification tokenをCloudflare版へ維持
