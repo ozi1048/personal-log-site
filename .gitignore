@@ -3,6 +3,7 @@ node_modules/
 .wrangler/
 .astro/
 dist/
+dist-production/
 .dev.vars
 .env
 .env.*

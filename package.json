@@ -9,6 +9,8 @@
     "preview": "wrangler dev",
     "test": "node scripts/test-build.mjs",
     "test:preview": "node scripts/test-preview.mjs",
+    "test:production": "PUBLIC_DEPLOYMENT_ENV=production PUBLIC_SITE_URL=https://calmapercorso.com PUBLIC_GA_MEASUREMENT_ID=G-PHASE4TEST BUILD_OUT_DIR=dist-production ASTRO_TELEMETRY_DISABLED=1 astro check && PUBLIC_DEPLOYMENT_ENV=production PUBLIC_SITE_URL=https://calmapercorso.com PUBLIC_GA_MEASUREMENT_ID=G-PHASE4TEST BUILD_OUT_DIR=dist-production ASTRO_TELEMETRY_DISABLED=1 astro build && BUILD_DIR=dist-production node scripts/test-production-build.mjs",
+    "audit:prelaunch": "node scripts/audit-prelaunch.mjs",
     "check": "ASTRO_TELEMETRY_DISABLED=1 astro check",
     "migrate:wordpress": "node scripts/migrate-wordpress.mjs",
     "migrate:wordpress:snapshot": "node scripts/migrate-wordpress.mjs --from-snapshot",

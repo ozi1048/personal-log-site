@@ -16,16 +16,15 @@ logNumber: 8
 sourceInternalLinks: []
 bodyImages:
   - url: "https://calmapercorso.com/wp-content/uploads/2026/02/image-1-1024x258.png"
-    alt: ""
+    alt: "移住支援金の対象者要件（東京圏での居住・通勤期間）"
     caption: "出典： 内閣官房・内閣府総合サイト「地方創生」"
   - url: "https://calmapercorso.com/wp-content/uploads/2026/02/スクリーンショット-2026-02-07-16.13.16.png"
-    alt: ""
+    alt: "移住支援金の移住先での就業・テレワーク等の要件"
     caption: "出典： 内閣官房・内閣府総合サイト「地方創生」"
   - url: "https://calmapercorso.com/wp-content/uploads/2026/02/image-1024x191.png"
-    alt: ""
+    alt: "大町市移住支援金の移住元に関する要件"
     caption: "出典： 大町市ホームページ"
-conversionWarnings:
-  - "WordPress元画像のalt欠落: 3件"
+conversionWarnings: []
 sourceHtmlFile: "docs/migration/source/wordpress-posts.json"
 draft: false
 ---
@@ -74,11 +73,11 @@ draft: false
 
 内閣府の指針によれば、主な要件は以下の通りです。
 
-![](https://calmapercorso.com/wp-content/uploads/2026/02/image-1-1024x258.png)
+![移住支援金の対象者要件（東京圏での居住・通勤期間）](https://calmapercorso.com/wp-content/uploads/2026/02/image-1-1024x258.png)
 
 出典：[内閣官房・内閣府総合サイト「地方創生」](https://www.chisou.go.jp/sousei/ijyu_shienkin.html)
 
-![](https://calmapercorso.com/wp-content/uploads/2026/02/スクリーンショット-2026-02-07-16.13.16.png)
+![移住支援金の移住先での就業・テレワーク等の要件](https://calmapercorso.com/wp-content/uploads/2026/02/スクリーンショット-2026-02-07-16.13.16.png)
 
 出典：[内閣官房・内閣府総合サイト「地方創生」](https://www.chisou.go.jp/sousei/ijyu_shienkin.html)
 
@@ -104,7 +103,7 @@ draft: false
 
 以下は大町市のHPに記載の条件
 
-![](https://calmapercorso.com/wp-content/uploads/2026/02/image-1024x191.png)
+![大町市移住支援金の移住元に関する要件](https://calmapercorso.com/wp-content/uploads/2026/02/image-1024x191.png)
 
 出典：[大町市ホームページ](https://www.city.omachi.nagano.jp/00002000/00002800/ijushienkin.html)
 

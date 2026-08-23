@@ -1,5 +1,6 @@
 ---
 import { SITE } from '../config/site';
+import { isPreview } from '../lib/seo';
 ---
 
 <footer class="site-footer">
@@ -19,6 +20,6 @@ import { SITE } from '../config/site';
   </div>
   <div class="shell footer-bottom">
     <small>© {new Date().getFullYear()} {SITE.name}</small>
-    <small>Preview — noindex</small>
+    {isPreview && <small>Preview — noindex</small>}
   </div>
 </footer>

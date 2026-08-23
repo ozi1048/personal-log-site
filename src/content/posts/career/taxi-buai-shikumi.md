@@ -15,13 +15,12 @@ logNumber: 13
 sourceInternalLinks: []
 bodyImages:
   - url: "https://calmapercorso.com/wp-content/uploads/2026/03/想定70000円-1-1024x821.png"
-    alt: ""
+    alt: "タクシー月間売上が1日平均約7万円だった実績と月収シミュレーション"
     caption: ""
   - url: "https://calmapercorso.com/wp-content/uploads/2026/03/想定60000円.png"
-    alt: ""
+    alt: "タクシー月間売上の実績と1日平均6万・6万5千・7万円の月収シミュレーション"
     caption: ""
-conversionWarnings:
-  - "WordPress元画像のalt欠落: 2件"
+conversionWarnings: []
 sourceHtmlFile: "docs/migration/source/wordpress-posts.json"
 draft: false
 ---
@@ -145,9 +144,9 @@ draft: false
 
 ・手取り（額面ー10万円）
 
-![](https://calmapercorso.com/wp-content/uploads/2026/03/想定70000円-1-1024x821.png "初月売上")
+![タクシー月間売上が1日平均約7万円だった実績と月収シミュレーション](https://calmapercorso.com/wp-content/uploads/2026/03/想定70000円-1-1024x821.png "初月売上")
 
-![](https://calmapercorso.com/wp-content/uploads/2026/03/想定60000円.png)
+![タクシー月間売上の実績と1日平均6万・6万5千・7万円の月収シミュレーション](https://calmapercorso.com/wp-content/uploads/2026/03/想定60000円.png)
 
 金額はザックリ計算ですが、実際に近い数字にはなりました
 

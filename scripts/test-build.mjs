@@ -8,6 +8,14 @@ const dist = (...parts) => resolve(root, 'dist', ...parts);
 const read = (...parts) => readFileSync(dist(...parts), 'utf8');
 const inventory = JSON.parse(readFileSync(resolve(root, 'docs/migration/phase-1-content-inventory.json'), 'utf8'));
 const fixedPages = JSON.parse(readFileSync(resolve(root, 'docs/migration/phase-1-fixed-pages.json'), 'utf8'));
+const expectedBodyImageAlts = new Map([
+  ['https://calmapercorso.com/wp-content/uploads/2026/05/image.png', '14回の転職に伴う年収推移グラフ'],
+  ['https://calmapercorso.com/wp-content/uploads/2026/03/想定70000円-1-1024x821.png', 'タクシー月間売上が1日平均約7万円だった実績と月収シミュレーション'],
+  ['https://calmapercorso.com/wp-content/uploads/2026/03/想定60000円.png', 'タクシー月間売上の実績と1日平均6万・6万5千・7万円の月収シミュレーション'],
+  ['https://calmapercorso.com/wp-content/uploads/2026/02/image-1-1024x258.png', '移住支援金の対象者要件（東京圏での居住・通勤期間）'],
+  ['https://calmapercorso.com/wp-content/uploads/2026/02/スクリーンショット-2026-02-07-16.13.16.png', '移住支援金の移住先での就業・テレワーク等の要件'],
+  ['https://calmapercorso.com/wp-content/uploads/2026/02/image-1024x191.png', '大町市移住支援金の移住元に関する要件'],
+]);
 
 function routeFile(pathname) {
   const decoded = decodeURIComponent(pathname).replace(/^\/+|\/+$/g, '');
@@ -73,8 +81,15 @@ for (const post of inventory) {
   assert.match(html, /"@type":"BreadcrumbList"/, `BreadcrumbList missing: ${post.slug}`);
   for (const imageUrl of post.body_images) {
     assert.ok(html.includes(imageUrl) || html.includes(encodeURI(imageUrl)), `WordPress body image URL missing: ${post.slug} -> ${imageUrl}`);
+    const expectedAlt = expectedBodyImageAlts.get(imageUrl);
+    if (expectedAlt) assert.ok(html.includes(`alt="${expectedAlt}"`), `body image alt missing: ${post.slug} -> ${imageUrl}`);
   }
 }
+
+const relatedCard = read('tokyo-taxi-driver-quit-reason', 'index.html');
+assert.match(relatedCard, /class="related-reference"/);
+assert.match(relatedCard, /href="\/bankruptcy-cancellation\/"/);
+assert.match(relatedCard, /【#6】自己破産直前、弁護士契約が強制解約になった話/);
 
 for (const pathname of ['/', '/プロフィール/', '/privacy-policy-2/', '/お問い合わせ/', '/404.html']) {
   const html = read(routeFile(pathname));
@@ -127,7 +142,7 @@ for (const file of htmlFiles) {
 }
 
 assert.match(read('404.html'), /404/);
-assert.match(read('お問い合わせ', 'index.html'), /Previewではお問い合わせフォームを送信できません/);
+assert.match(read('お問い合わせ', 'index.html'), /現在、このページからお問い合わせは送信できません/);
 assert.doesNotMatch(read('お問い合わせ', 'index.html'), /<form\b/i, 'Contact Form 7 form must not be active in preview');
 
 console.log('Verified 19 posts, 3 fixed pages, 3 categories, 23 preserved WordPress paths, SEO/JSON-LD, 28 sitemap URLs, 19 RSS items, preview noindex and internal links.');

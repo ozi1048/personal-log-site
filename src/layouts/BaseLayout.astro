@@ -13,6 +13,7 @@ interface Props {
   canonical?: string;
   type?: 'website' | 'article';
   schema?: object | object[];
+  robots?: string;
 }
 
 const {
@@ -22,6 +23,7 @@ const {
   canonical: sourceCanonical,
   type = 'website',
   schema = [],
+  robots = 'index, follow, max-image-preview:large',
 } = Astro.props;
 
 const pageTitle = title ? `${title} | ${SITE.name}` : `${SITE.name} — 過去と向き合うための記録`;
@@ -29,6 +31,7 @@ const canonical = canonicalFor(Astro.url.pathname, sourceCanonical);
 const ogImage = resolveImageUrl(image);
 const schemas = Array.isArray(schema) ? schema : [schema];
 const gaMeasurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
+const robotsContent = isPreview ? 'noindex, nofollow, noarchive, nosnippet' : robots;
 ---
 
 <!doctype html>
@@ -40,7 +43,7 @@ const gaMeasurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
     <meta name="theme-color" content="#f1ede4" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
-    <meta name="robots" content={isPreview ? 'noindex, nofollow, noarchive, nosnippet' : 'index, follow, max-image-preview:large'} />
+    <meta name="robots" content={robotsContent} />
     <link rel="canonical" href={canonical} />
     <link rel="alternate" type="application/rss+xml" title={`${SITE.name} RSS`} href="/rss.xml" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />

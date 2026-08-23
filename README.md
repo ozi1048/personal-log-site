@@ -2,7 +2,7 @@
 
 `calmapercorso.com` のWordPress過去ログを、Markdown + Astro + Cloudflare Workersへ段階移行するプロジェクトです。
 
-Phase 2では、本番WordPressを変更せず、4記事のサンプルでpreviewサイトを構築しています。
+Phase 4まで完了し、本番WordPressを変更せず、公開19記事・固定ページ3件を移行したpreviewサイトと本番切り替え計画を構築しています。本番DNS・本番domain routeは未変更です。
 
 ## 開発
 
@@ -16,6 +16,8 @@ pnpm dev
 ```bash
 pnpm build
 pnpm test
+pnpm test:production
+pnpm audit:prelaunch
 ```
 
 ## 環境変数
@@ -32,10 +34,10 @@ pnpm test
 
 ## デプロイ
 
-Cloudflare Workers Static Assetsとして`dist/`を配信します。DNSや`calmapercorso.com`のroute設定は使用しません。
+PreviewはCloudflare Workers Static Assetsとして`dist/`を配信します。次のコマンドはpreview Workerだけを更新し、DNSや`calmapercorso.com`のroute設定は使用しません。
 
 ```bash
 PUBLIC_SITE_URL=https://personal-log-site-preview.cloudflare-migration-plan.workers.dev PUBLIC_DEPLOYMENT_ENV=preview pnpm deploy
 ```
 
-Phase 1調査結果は [`docs/migration/phase-1-site-audit.md`](docs/migration/phase-1-site-audit.md) を参照してください。
+Phase 4の検証結果は [`docs/migration/phase-4-prelaunch-validation.md`](docs/migration/phase-4-prelaunch-validation.md)、実行前チェックは [`docs/migration/prelaunch-checklist.md`](docs/migration/prelaunch-checklist.md) を参照してください。本番切り替えは明示的な許可があるまで実行しません。

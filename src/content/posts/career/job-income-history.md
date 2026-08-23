@@ -15,15 +15,14 @@ logNumber: 19
 sourceInternalLinks: []
 bodyImages:
   - url: "https://calmapercorso.com/wp-content/uploads/2026/05/image.png"
-    alt: ""
+    alt: "14回の転職に伴う年収推移グラフ"
     caption: ""
-conversionWarnings:
-  - "WordPress元画像のalt欠落: 1件"
+conversionWarnings: []
 sourceHtmlFile: "docs/migration/source/wordpress-posts.json"
 draft: false
 ---
 
-![](https://calmapercorso.com/wp-content/uploads/2026/05/image.png)
+![14回の転職に伴う年収推移グラフ](https://calmapercorso.com/wp-content/uploads/2026/05/image.png)
 
 初めて就職した会社を9年間勤め、32歳で初転職、そこから14回の転職を経験しました。
 

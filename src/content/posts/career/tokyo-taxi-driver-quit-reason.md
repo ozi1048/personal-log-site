@@ -19,8 +19,7 @@ bodyImages:
     alt: ""
     caption: ""
 conversionWarnings:
-  - "AFFINGER関連記事カードを通常リンクへ変換（表示要確認）"
-  - "WordPress元画像のalt欠落: 1件"
+  - "AFFINGER関連記事カードを通常リンクへ変換（Phase 4で表示確認済み）"
 sourceHtmlFile: "docs/migration/source/wordpress-posts.json"
 draft: false
 ---
@@ -197,11 +196,7 @@ Max20時間強が1回の業務時間（休憩時間含む）
 
 ただ、問題だった借金は移住することによって、大問題と発展してしまったのですが・・・
 
-![](https://calmapercorso.com/wp-content/uploads/2026/01/見出しを追加-23-150x150.png)
-
-[こちらも合わせて：【#6】自己破産直前、弁護士契約が強制解約になった話](/bankruptcy-cancellation/)
-
-契約した弁護士に約1年間、支払い続けていた タクシードライバーになったことで、収入は安定した お金に余裕ができると、気持ちにも余裕が生まれた 仕事は正直しんどかったが、 会社の人たちはイイ人達ばかりで …
+<aside class="related-reference" aria-label="関連記事"><img decoding="async" loading="lazy" width="150" height="150" src="https://calmapercorso.com/wp-content/uploads/2026/01/見出しを追加-23-150x150.png" alt=""><div><p class="related-reference-label">こちらも合わせて</p><p><a href="/bankruptcy-cancellation/">【#6】自己破産直前、弁護士契約が強制解約になった話</a></p><p>契約した弁護士に約1年間、支払い続けていた タクシードライバーになったことで、収入は安定した お金に余裕ができると、気持ちにも余裕が生まれた 仕事は正直しんどかったが、 会社の人たちはイイ人達ばかりで …</p></div></aside>
 
 ## タクシーは正解だった、でも自分には限界があった。それでいい。
 

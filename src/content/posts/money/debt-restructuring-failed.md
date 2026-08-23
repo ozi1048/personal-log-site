@@ -15,7 +15,7 @@ logNumber: 4
 sourceInternalLinks: []
 bodyImages: []
 conversionWarnings:
-  - "WordPressで欠落していたmeta descriptionを本文から新規作成"
+  - "WordPressで欠落していたmeta descriptionを本文から新規作成し、Phase 4で正式採用"
 sourceHtmlFile: "docs/migration/source/wordpress-posts.json"
 draft: false
 ---

@@ -26,6 +26,18 @@ const paths = {
 };
 
 const categoryById = new Map();
+const manualImageAlts = new Map([
+  ['https://calmapercorso.com/wp-content/uploads/2026/05/image.png', '14回の転職に伴う年収推移グラフ'],
+  ['https://calmapercorso.com/wp-content/uploads/2026/01/見出しを追加-23-150x150.png', ''],
+  ['https://calmapercorso.com/wp-content/uploads/2026/03/想定70000円-1-1024x821.png', 'タクシー月間売上が1日平均約7万円だった実績と月収シミュレーション'],
+  ['https://calmapercorso.com/wp-content/uploads/2026/03/想定60000円.png', 'タクシー月間売上の実績と1日平均6万・6万5千・7万円の月収シミュレーション'],
+  ['https://calmapercorso.com/wp-content/uploads/2026/02/image-1-1024x258.png', '移住支援金の対象者要件（東京圏での居住・通勤期間）'],
+  ['https://calmapercorso.com/wp-content/uploads/2026/02/スクリーンショット-2026-02-07-16.13.16.png', '移住支援金の移住先での就業・テレワーク等の要件'],
+  ['https://calmapercorso.com/wp-content/uploads/2026/02/image-1024x191.png', '大町市移住支援金の移住元に関する要件'],
+]);
+const decorativeImageUrls = new Set([
+  'https://calmapercorso.com/wp-content/uploads/2026/01/見出しを追加-23-150x150.png',
+]);
 const htmlEntityMap = new Map([
   ['amp', '&'], ['lt', '<'], ['gt', '>'], ['quot', '"'], ['apos', "'"], ['nbsp', ' '],
   ['#038', '&'], ['#8211', '–'], ['#8212', '—'], ['#8216', '‘'], ['#8217', '’'],
@@ -54,8 +66,9 @@ function stripHtml(value = '') {
 function stripMarkdown(value = '') {
   return value
     .replace(/<!--([\s\S]*?)-->/g, '')
-    .replace(/!\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/!\[([^\]]*)\]\([^)]*\)/g, '')
     .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+    .replace(/<[^>]+>/g, ' ')
     .replace(/^#{1,6}\s+/gm, '')
     .replace(/[*_~`>|-]/g, '')
     .replace(/\s+/g, ' ')
@@ -197,13 +210,14 @@ function markdownConverter() {
     emDelimiter: '*',
   });
   service.use(gfm);
+  service.keep((node) => node.nodeName === 'ASIDE' && node.classList.contains('related-reference'));
   service.addRule('spacer', {
     filter: (node) => node.nodeName === 'DIV' && node.classList.contains('wp-block-spacer'),
     replacement: () => '\n\n',
   });
   service.addRule('contactForm', {
     filter: (node) => node.nodeName === 'FORM' && node.classList.contains('wpcf7-form'),
-    replacement: () => '\n\n> **Previewではお問い合わせフォームを送信できません。** 既存WordPressのContact Form 7設定は移行元スナップショットに保持し、Cloudflare向け送信方式は本番切替前に決定します。\n\n現行フォームの入力項目：\n\n- 氏名（必須）\n- メールアドレス（必須）\n- 題名（必須）\n- メッセージ本文\n\n<!-- Contact Form 7 form ID: 74; manual migration required -->\n\n',
+    replacement: () => '\n\n> **現在、このページからお問い合わせは送信できません。** 既存WordPressのContact Form 7設定は移行元スナップショットに保持し、Cloudflare向け送信方式は本番切替前に決定します。\n\n現行フォームの入力項目：\n\n- 氏名（必須）\n- メールアドレス（必須）\n- 題名（必須）\n- メッセージ本文\n\n<!-- Contact Form 7 form ID: 74; manual migration required -->\n\n',
   });
   return service;
 }
@@ -212,18 +226,34 @@ function escapeHtml(value) {
   return value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 }
 
+function applyManualImageAlts(html) {
+  return html.replace(/<img\b[^>]*>/gi, (imageTag) => {
+    const src = decodeEntities(imageTag.match(/\bsrc="([^"]+)"/i)?.[1] ?? '');
+    if (!manualImageAlts.has(src)) return imageTag;
+    const alt = escapeHtml(manualImageAlts.get(src));
+    if (/\balt="[^"]*"/i.test(imageTag)) return imageTag.replace(/\balt="[^"]*"/i, `alt="${alt}"`);
+    return imageTag.replace(/\s*\/>$/, ` alt="${alt}" />`);
+  });
+}
+
 function flattenAffingerCards(html) {
   return html.replace(/<a\b([^>]*class="[^"]*\bst-cardlink\b[^"]*"[^>]*)>([\s\S]*?)<\/a>/gi, (_whole, attributes, body) => {
     const href = decodeEntities(attributes.match(/\bhref="([^"]+)"/i)?.[1] ?? '');
-    const imageTag = body.match(/<img\b[^>]*>/i)?.[0] ?? '';
+    const sourceImageTag = body.match(/<img\b[^>]*>/i)?.[0] ?? '';
+    const imageSrc = decodeEntities(sourceImageTag.match(/\bsrc="([^"]+)"/i)?.[1] ?? '');
+    const imageWidth = sourceImageTag.match(/\bwidth="([^"]+)"/i)?.[1] ?? '150';
+    const imageHeight = sourceImageTag.match(/\bheight="([^"]+)"/i)?.[1] ?? '150';
+    const imageTag = imageSrc
+      ? `<img decoding="async" loading="lazy" width="${escapeHtml(imageWidth)}" height="${escapeHtml(imageHeight)}" src="${escapeHtml(imageSrc)}" alt="">`
+      : '';
     const title = stripHtml(body.match(/<h[1-6]\b[^>]*>([\s\S]*?)<\/h[1-6]>/i)?.[1] ?? '関連記事');
     const excerpt = stripHtml(body.match(/class="[^"]*\bst-card-excerpt\b[^"]*"[^>]*>([\s\S]*?)<\/div>/i)?.[1] ?? '');
-    return `<figure class="migrated-related-card">${imageTag}<figcaption><a href="${escapeHtml(href)}">こちらも合わせて：${escapeHtml(title)}</a></figcaption></figure>${excerpt ? `<p>${escapeHtml(excerpt)}</p>` : ''}`;
+    return `<aside class="related-reference" aria-label="関連記事">${imageTag}<div><p class="related-reference-label">こちらも合わせて</p><p><a href="${escapeHtml(href)}">${escapeHtml(title)}</a></p>${excerpt ? `<p>${escapeHtml(excerpt)}</p>` : ''}</div></aside>`;
   });
 }
 
 function convertHtml(html) {
-  const previewLinkedHtml = flattenAffingerCards(html).replace(
+  const previewLinkedHtml = flattenAffingerCards(applyManualImageAlts(html)).replace(
     /href=(['"])https:\/\/calmapercorso\.com(\/[^'\"]*)\1/gi,
     'href=$1$2$1',
   );
@@ -254,7 +284,7 @@ const pageConfig = {
     id: 'privacy-policy', path: '/privacy-policy-2/', description: 'calmapercorsoにおける個人情報、広告、アクセス解析、著作権、免責事項についての方針。', label: 'PRIVACY POLICY',
   },
   '%e3%81%8a%e5%95%8f%e3%81%84%e5%90%88%e3%82%8f%e3%81%9b': {
-    id: 'contact', path: '/お問い合わせ/', description: 'calmapercorsoへのお問い合わせページ。Cloudflare previewでは送信機能を停止しています。', label: 'CONTACT',
+    id: 'contact', path: '/お問い合わせ/', description: 'calmapercorsoへのお問い合わせ方法と、送信時に取り扱う情報についての案内ページです。', label: 'CONTACT',
   },
 };
 
@@ -334,13 +364,14 @@ for (const item of normalizedPosts) {
 
   const html = item.content.rendered;
   const stats = classify(html);
-  const images = extractImages(html);
+  const images = extractImages(applyManualImageAlts(html));
   const internalLinks = extractInternalLinks(html);
   const warnings = [];
   const unconverted = [];
-  if (stats.affingerCards) warnings.push('AFFINGER関連記事カードを通常リンクへ変換（表示要確認）');
-  if (images.some((image) => !image.alt)) warnings.push(`WordPress元画像のalt欠落: ${images.filter((image) => !image.alt).length}件`);
-  if (!phaseOne.meta_description) warnings.push('WordPressで欠落していたmeta descriptionを本文から新規作成');
+  if (stats.affingerCards) warnings.push('AFFINGER関連記事カードを通常リンクへ変換（Phase 4で表示確認済み）');
+  const unexplainedImages = images.filter((image) => !image.alt && !decorativeImageUrls.has(image.url));
+  if (unexplainedImages.length) warnings.push(`説明が必要な画像のalt欠落: ${unexplainedImages.length}件`);
+  if (!phaseOne.meta_description) warnings.push('WordPressで欠落していたmeta descriptionを本文から新規作成し、Phase 4で正式採用');
   if (stats.shortcodes.length) { warnings.push(`ショートコード: ${stats.shortcodes.length}件`); unconverted.push(...stats.shortcodes); }
   if (stats.embeds) { warnings.push(`埋め込み要素: ${stats.embeds}件`); unconverted.push('embed'); }
 
@@ -350,7 +381,7 @@ for (const item of normalizedPosts) {
 
   const sourceChars = stripHtml(html).length;
   const markdownChars = stripMarkdown(markdown).length;
-  const manual = Boolean(unconverted.length || stats.affingerCards || !phaseOne.meta_description);
+  const manual = Boolean(unconverted.length);
   const status = unconverted.length || manual ? 'needs_manual_review' : warnings.length ? 'warning' : 'passed';
   reportRows.push({
     wordpress_id: item.id,

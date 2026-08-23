@@ -1,0 +1,16 @@
+{
+  "capturedAt": "2026-08-23T13:00:00+09:00",
+  "method": "read-only public DNS queries; values may not include private or uncommon records",
+  "records": [
+    { "name": "calmapercorso.com", "type": "A", "value": "85.131.213.48", "observedTtlSeconds": 3284 },
+    { "name": "www.calmapercorso.com", "type": "A", "value": "85.131.213.48", "observedTtlSeconds": 3600 },
+    { "name": "mail.calmapercorso.com", "type": "A", "value": "85.131.213.48", "observedTtlSeconds": 3600 },
+    { "name": "ftp.calmapercorso.com", "type": "A", "value": "85.131.213.48", "observedTtlSeconds": 3600 },
+    { "name": "calmapercorso.com", "type": "MX", "priority": 0, "value": "calmapercorso.com", "observedTtlSeconds": 3600 },
+    { "name": "calmapercorso.com", "type": "TXT", "value": "v=spf1 +a:sv16667.xserver.jp +a:calmapercorso.com +mx include:spf.sender.xserver.jp ~all", "observedTtlSeconds": 3600 },
+    { "name": "calmapercorso.com", "type": "NS", "value": "ns1.xserver.jp ... ns5.xserver.jp", "observedTtlSeconds": 3600 },
+    { "name": "calmapercorso.com", "type": "SOA", "value": "ns1.xserver.jp root.xserver.jp 0 10800 3600 604800 3600", "observedTtlSeconds": 3600 }
+  ],
+  "notObserved": ["AAAA", "DS/DNSSEC", "CAA", "_dmarc TXT"],
+  "cutoverNote": "Export the complete Xserver DNS zone before changing nameservers. Public enumeration cannot prove that this is the complete record set."
+}
