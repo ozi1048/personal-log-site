@@ -142,7 +142,16 @@ for (const file of htmlFiles) {
 }
 
 assert.match(read('404.html'), /404/);
-assert.match(read('お問い合わせ', 'index.html'), /現在、このページからお問い合わせは送信できません/);
-assert.doesNotMatch(read('お問い合わせ', 'index.html'), /<form\b/i, 'Contact Form 7 form must not be active in preview');
+const previewContact = read('お問い合わせ', 'index.html');
+assert.match(previewContact, /<form\b[^>]*id="contact-form"/i);
+assert.match(previewContact, /Preview環境では誤送信防止のため/);
+assert.match(previewContact, /data-enabled="false"/);
+assert.match(previewContact, /name="email"[^>]*required/i);
+assert.match(previewContact, /name="message"[^>]*required/i);
+assert.doesNotMatch(previewContact, /https:\/\/formspree\.io\/f\/xeajwayl/, 'Formspree endpoint must not be emitted in preview');
+assert.doesNotMatch(previewContact, /challenges\.cloudflare\.com\/turnstile/, 'Turnstile widget must not load in preview');
+assert.doesNotMatch(previewContact, /class="cf-turnstile"/, 'Turnstile widget must not be emitted in preview');
+assert.match(read('privacy-policy-2', 'index.html'), /Formspree/);
+assert.match(read('privacy-policy-2', 'index.html'), /Cloudflare Turnstile/);
 
 console.log('Verified 19 posts, 3 fixed pages, 3 categories, 23 preserved WordPress paths, SEO/JSON-LD, 28 sitemap URLs, 19 RSS items, preview noindex and internal links.');

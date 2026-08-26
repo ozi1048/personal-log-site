@@ -15,7 +15,7 @@ Astroのコンテンツ・URL・SEO実装は本番切り替え候補として合
 1. Cloudflareへ登録するWeb/verification DNS recordの確定とDNSSEC/DS確認
 2. 同一ドメインのWordPress画像を維持するWorker Route除外設定の事前テスト
 3. Search Console所有権方式の確認と、確定したGA4 Measurement IDのproduction設定・受信試験
-4. お問い合わせの外部メール通知先とFormspree/Turnstile設定の決定・プライバシー文言更新
+4. Formspreeのdomain制限とproduction用環境変数の最終設定（Turnstile、プライバシー文言、production candidate実送信・通知着信は確認済み）
 
 ## 全ページ検証
 
@@ -90,7 +90,11 @@ sitemap 28 URLの内訳は、トップ1、記事19、記事一覧1、カテゴ�
 | 外部フォーム（Formspree + Turnstile） | 低 | Freeは50件/月 | Turnstile、domain制限、サービス側filter | 第三者へ送信しFreeは30日保持 | ベンダー依存だが保守最小 | **現在の推奨** |
 | `mailto:`のみ | 最小 | $0 | 公開アドレスが収集されやすい | メールクライアント内 | 端末設定依存、送信完了を確認しにくい | 一時的な退避策 |
 
-推奨はFormspree Free + Cloudflare Turnstile。1フォーム、月50件以内を開始条件とし、送信元domain制限を有効化する。Turnstileは個人ブログ向けFree planがあり、FormspreeはTurnstileを直接サポートする。通知先は`calmapercorso.com`ではない外部メールアドレスとし、保持期間への同意、Formspreeを処理委託先としてプライバシーポリシーへ記載する文言を決めてから実装する。件数増加、独自保持方針、HakubaSafetyとの共通化が必要になった時点でWorker APIへ移行する。
+Formspree Form ID `xeajwayl`を使うAstro + Vanilla JSフォームを実装した。Ajax送信、必須validation、送信中・成功・失敗表示を持ち、previewではendpointを出力せず入力と送信を無効化する。productionでも`PUBLIC_CONTACT_FORM_ENABLED=true`を明示した場合だけ有効になる。
+
+Turnstile Site Key `0x4AAAAAAEZOOB4bmw0qotmj`を公開build変数として設定し、`production-candidate`とproduction buildでwidget、token送信、resetを検証した。Cloudflare画面ではallowed hostnameが`calmapercorso.com`のみであることを確認した。Secret Keyの値はコード、GitHub、文書、クライアント成果物には保存しない。
+
+2026-08-26にFormspree CAPTCHAを有効化し、production candidateで必須入力エラー、Turnstile未完了時の拒否、正常送信、成功後のフォーム・Turnstile resetを実ブラウザ確認した。正常送信はFormspree Inboxへ保存され、外部通知先にも同日23:07 JSTに着信した。候補`workers.dev` hostnameは試験中だけTurnstileへ追加し、試験後に削除済みで、最終allowed hostnameは`calmapercorso.com`のみ。通信・送信失敗時の表示分岐はcandidate build testで確認した。ダミーアドレスと明示的なtest文面による再試験1件はFormspreeのSpamへ分類されたが、実運用相当の送信は正常処理されたためBlocking issueとはしない。残るContact項目はFormspree側domain制限の画面確認とCloudflare production環境変数の設定である。プライバシーポリシーにはFormspreeとCloudflare Turnstileの利用を追記済み。件数増加、独自保持方針、HakubaSafetyとの共通化が必要になった時点でWorker APIへ移行する。
 
 参考: [Turnstile plans](https://developers.cloudflare.com/turnstile/plans/)、[Turnstile server-side validation](https://developers.cloudflare.com/turnstile/get-started/server-side-validation/)、[Formspree account limits](https://help.formspree.io/articles/account-management/account-limits)、[Formspree Turnstile](https://help.formspree.io/articles/form-and-project-settings/protecting-your-forms-with-cloudflare-turnstile/)
 

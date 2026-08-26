@@ -39,10 +39,23 @@
 ## Contact
 
 - [x] 3方式の比較とFormspree + Turnstile推奨を決定
-- [ ] Formspree account/form IDと外部通知先emailを決定
-- [ ] Turnstile site/secret key、allowed hostname、domain制限を設定
-- [ ] 保持期間・処理委託先をプライバシーポリシーへ反映
-- [ ] production candidateで正常送信、validation、spam、失敗表示を試験
+- [x] Formspree Form ID `xeajwayl`とendpointを実装
+- [x] production限定Ajax送信、入力validation、成功・失敗表示を実装
+- [x] previewでendpointを出力せず、入力・送信を無効化
+- [x] Turnstile widget、token必須確認、`cf-turnstile-response`送信、成功・失敗後resetを実装
+- [x] Formspree CAPTCHAを有効化し、登録済みSecret Keyとの連携を実送信で確認（Secret Keyの値は表示・保存していない）
+- [x] Turnstile Site Key `0x4AAAAAAEZOOB4bmw0qotmj`を公開build変数として記録
+- [x] noindexを維持する`production-candidate` buildと専用Worker名を用意
+- [ ] Cloudflare productionで`PUBLIC_CONTACT_FORM_ENABLED=true`とSite Keyを設定
+- [x] Formspree WorkflowにEmail通知actionがあることを画面確認
+- [x] Formspreeの外部通知先emailへの実着信を確認（2026-08-26 23:07 JST）
+- [x] Turnstile allowed hostnameが`calmapercorso.com`のみであることを画面確認
+- [ ] Formspree domain制限が`calmapercorso.com`であることを画面確認
+- [x] 候補`workers.dev` hostnameを試験中だけ許可し、試験後に削除（最終状態は`calmapercorso.com`のみ）
+- [x] FormspreeとCloudflare Turnstileの利用をプライバシーポリシーへ反映
+- [x] production candidateで正常送信、必須validation、Turnstile未完了拒否、成功後resetを実ブラウザ確認
+- [x] Formspree Inboxへの保存と外部通知先への実着信を確認
+- [x] 通信・送信失敗時のメッセージ分岐をcandidate build testで確認
 
 ## Google
 

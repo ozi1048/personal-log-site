@@ -27,6 +27,17 @@ pnpm audit:prelaunch
 - `PUBLIC_SITE_URL`: canonical、sitemap、RSSに使うpreview origin
 - `PUBLIC_DEPLOYMENT_ENV`: previewでは`preview`。全ページがnoindexになる
 - `PUBLIC_GA_MEASUREMENT_ID`: 将来のGA4設定口。previewでは空のままにする
+- `PUBLIC_CONTACT_FORM_ENABLED`: productionで`true`の場合だけFormspree送信を有効化する
+- `PUBLIC_TURNSTILE_SITE_KEY`: Turnstileの公開Site Key。Secret Keyはクライアント環境変数やGitHubへ置かない
+
+`production-candidate`はFormspree + Turnstileを有効にしつつ、meta robots、`X-Robots-Tag`、robots.txtでnoindexを維持する。候補Workerは本番routeを持たない別名を使う。
+
+```bash
+pnpm test:candidate
+pnpm deploy:candidate
+```
+
+実送信前に、Turnstile allowed hostnameとFormspree domain制限へ候補の`workers.dev` hostnameを一時追加する。本番切り替え後は候補hostnameを削除し、`calmapercorso.com`だけに戻す。
 
 ## コンテンツ
 

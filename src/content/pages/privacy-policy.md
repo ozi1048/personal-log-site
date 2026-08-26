@@ -17,6 +17,15 @@ sourceHtmlFile: "docs/migration/source/wordpress-pages.json"
 当ブログでは、お問い合わせの際に、名前やメールアドレス等の個人情報をご入力いただく場合があります。
 取得した個人情報は、必要な連絡以外の目的では利用しません。
 
+
+##### お問い合わせフォームについて
+
+当ブログのお問い合わせフォームには、フォーム送信サービス「Formspree」を利用します。入力されたお名前、メールアドレス、お問い合わせ内容等は、送信処理と返信対応のためFormspreeへ送信されます。
+
+また、スパムや不正送信の防止を目的としてCloudflare Turnstileを利用します。Turnstileによる確認に必要な通信情報はCloudflareへ送信されます。これらの情報は、お問い合わせ対応と不正利用防止以外の目的では利用しません。
+
+詳細は、[Formspreeのプライバシーポリシー](https://formspree.io/legal/privacy-policy/)および[Cloudflareのプライバシーポリシー](https://www.cloudflare.com/privacypolicy/)をご確認ください。
+
 ##### 広告について
 
 当ブログでは、第三者配信の広告サービス（アフィリエイトプログラム等）を利用する場合があります。

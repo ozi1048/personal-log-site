@@ -22,7 +22,7 @@
 | 埋め込み/script | 1 | Contact Form 7由来scriptは実行せず元HTMLのみ保持 | 手動確認 |
 | AFFINGER関連記事カード | 1 | 通常リンクへ変換 | 手動表示確認 |
 | AFFINGER装飾 | 17 | 文言と意味要素を保持し、テーマ装飾は除去 | 自動変換 |
-| Contact Form 7 | 1 | preview案内へ置換。送信機能は未移行 | 手動確認 |
+| Contact Form 7 | 1 | AstroのFormspreeフォームへ置換。元HTMLはsnapshotに保持 | 実装済み |
 
 ## 検出したWordPressブロックclass
 

@@ -80,6 +80,21 @@ for (const pathname of ['/', '/articles/', '/category/', '/category/career/', '/
   assert.equal((html.match(/<h1(?:\s|>)/g) ?? []).length, 1, `H1 count mismatch: ${pathname}`);
 }
 
+const productionContact = read('お問い合わせ', 'index.html');
+assert.match(productionContact, /<form\b[^>]*id="contact-form"/i);
+assert.match(productionContact, /action="https:\/\/formspree\.io\/f\/xeajwayl"/);
+assert.match(productionContact, /data-enabled="true"/);
+assert.match(productionContact, /name="email"[^>]*required/i);
+assert.match(productionContact, /name="message"[^>]*required/i);
+assert.doesNotMatch(productionContact, /Preview環境では誤送信防止のため/);
+assert.match(productionContact, /class="cf-turnstile"/);
+assert.match(productionContact, /data-sitekey="0x4AAAAAAEZOOB4bmw0qotmj"/);
+assert.match(productionContact, /challenges\.cloudflare\.com\/turnstile\/v0\/api\.js/);
+assert.match(productionContact, /cf-turnstile-response/);
+assert.match(productionContact, /window\.turnstile\?\.reset\(\)/);
+assert.match(read('privacy-policy-2', 'index.html'), /Formspree/);
+assert.match(read('privacy-policy-2', 'index.html'), /Cloudflare Turnstile/);
+
 const headers = read('_headers');
 assert.doesNotMatch(headers, /X-Robots-Tag:\s*noindex/i, 'production _headers still sends noindex');
 assert.match(headers, /X-Content-Type-Options: nosniff/);

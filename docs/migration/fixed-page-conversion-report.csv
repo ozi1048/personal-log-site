@@ -1,4 +1,4 @@
 wordpress_id,slug,path,status,conversion_success,warning_count,warnings,unconverted_elements,source_text_chars,markdown_text_chars,text_char_difference,manual_review_required
-67,%e3%81%8a%e5%95%8f%e3%81%84%e5%90%88%e3%82%8f%e3%81%9b,/お問い合わせ/,needs_manual_review,true,1,Contact Form 7フォームは静的な案内へ置換。送信機能は未実装,Contact Form 7 submission and validation,23,147,124,true
-50,privacy-policy-2,/privacy-policy-2/,warning,true,1,AFFINGERメモ装飾を通常本文へ変換（文言は保持）,,613,613,0,false
+67,%e3%81%8a%e5%95%8f%e3%81%84%e5%90%88%e3%82%8f%e3%81%9b,/お問い合わせ/,warning,true,1,Contact Form 7フォームはAstroのFormspreeフォームへ置換,,23,75,52,false
+50,privacy-policy-2,/privacy-policy-2/,warning,true,1,AFFINGERメモ装飾を通常本文へ変換（文言は保持）,,613,916,303,false
 18,%e3%83%97%e3%83%ad%e3%83%95%e3%82%a3%e3%83%bc%e3%83%ab,/プロフィール/,passed,true,0,,,292,292,0,false

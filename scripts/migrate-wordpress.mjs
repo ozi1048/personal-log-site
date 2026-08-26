@@ -217,7 +217,7 @@ function markdownConverter() {
   });
   service.addRule('contactForm', {
     filter: (node) => node.nodeName === 'FORM' && node.classList.contains('wpcf7-form'),
-    replacement: () => '\n\n> **現在、このページからお問い合わせは送信できません。** 既存WordPressのContact Form 7設定は移行元スナップショットに保持し、Cloudflare向け送信方式は本番切替前に決定します。\n\n現行フォームの入力項目：\n\n- 氏名（必須）\n- メールアドレス（必須）\n- 題名（必須）\n- メッセージ本文\n\n<!-- Contact Form 7 form ID: 74; manual migration required -->\n\n',
+    replacement: () => '\n\n記事内容についてのご連絡やご質問は、下記フォームからお送りください。\n\nお問い合わせ内容によっては返信できない場合があります。あらかじめご了承ください。\n\n<!-- Contact Form 7 form ID: 74; replaced by Astro Formspree component -->\n\n',
   });
   return service;
 }
@@ -287,6 +287,14 @@ const pageConfig = {
     id: 'contact', path: '/お問い合わせ/', description: 'calmapercorsoへのお問い合わせ方法と、送信時に取り扱う情報についての案内ページです。', label: 'CONTACT',
   },
 };
+
+const privacyFormServicesDisclosure = `##### お問い合わせフォームについて
+
+当ブログのお問い合わせフォームには、フォーム送信サービス「Formspree」を利用します。入力されたお名前、メールアドレス、お問い合わせ内容等は、送信処理と返信対応のためFormspreeへ送信されます。
+
+また、スパムや不正送信の防止を目的としてCloudflare Turnstileを利用します。Turnstileによる確認に必要な通信情報はCloudflareへ送信されます。これらの情報は、お問い合わせ対応と不正利用防止以外の目的では利用しません。
+
+詳細は、[Formspreeのプライバシーポリシー](https://formspree.io/legal/privacy-policy/)および[Cloudflareのプライバシーポリシー](https://www.cloudflare.com/privacypolicy/)をご確認ください。`;
 
 function postFrontmatter(item, inventory, images, internalLinks, warnings) {
   return [
@@ -414,12 +422,17 @@ for (const item of normalizedPages) {
   const warnings = [];
   const unconverted = [];
   if (stats.contactForms) {
-    warnings.push('Contact Form 7フォームは静的な案内へ置換。送信機能は未実装');
-    unconverted.push('Contact Form 7 submission and validation');
+    warnings.push('Contact Form 7フォームはAstroのFormspreeフォームへ置換');
   }
   if (stats.affingerDecorations) warnings.push('AFFINGERメモ装飾を通常本文へ変換（文言は保持）');
   if (stats.embeds && !stats.contactForms) { warnings.push(`埋め込み要素: ${stats.embeds}件`); unconverted.push('embed'); }
-  const markdown = convertHtml(html);
+  let markdown = convertHtml(html);
+  if (config.id === 'privacy-policy' && !markdown.includes('Formspree')) {
+    const firstSectionEnd = markdown.indexOf('\n##### 広告について');
+    markdown = firstSectionEnd >= 0
+      ? `${markdown.slice(0, firstSectionEnd)}\n\n${privacyFormServicesDisclosure}\n${markdown.slice(firstSectionEnd)}`
+      : `${markdown}\n\n${privacyFormServicesDisclosure}`;
+  }
   writeGenerated(resolve(paths.pagesContent, `${config.id}.md`), `${pageFrontmatter(item, config, warnings)}\n\n${markdown}`);
   const sourceChars = stripHtml(html).length;
   const markdownChars = stripMarkdown(markdown).length;
@@ -474,7 +487,7 @@ const reportMarkdown = `# WordPress HTML変換分類\n\n` +
 `| 埋め込み/script | ${aggregate.embeds} | Contact Form 7由来scriptは実行せず元HTMLのみ保持 | 手動確認 |\n` +
 `| AFFINGER関連記事カード | ${aggregate.affingerCards} | 通常リンクへ変換 | 手動表示確認 |\n` +
 `| AFFINGER装飾 | ${aggregate.affingerDecorations} | 文言と意味要素を保持し、テーマ装飾は除去 | 自動変換 |\n` +
-`| Contact Form 7 | ${aggregate.contactForms} | preview案内へ置換。送信機能は未移行 | 手動確認 |\n\n` +
+`| Contact Form 7 | ${aggregate.contactForms} | AstroのFormspreeフォームへ置換。元HTMLはsnapshotに保持 | 実装済み |\n\n` +
 `## 検出したWordPressブロックclass\n\n${[...aggregate.wpBlocks].sort().map((block) => `- \`${block}\``).join('\n') || '- なし'}\n\n` +
 `## 保持方針\n\n変換後Markdownで削除したテーマ装飾やフォーム実行コードも、元のREST HTMLスナップショットに残している。本文画像URLはWordPressのままとし、表示時は既存の画像URLヘルパーを継続利用する。\n`;
 writeGenerated(paths.elementReport, reportMarkdown);

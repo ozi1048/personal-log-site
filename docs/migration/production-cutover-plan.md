@@ -23,7 +23,7 @@ R2移行前は、`calmapercorso.com`をWorker Custom Domainにしない。Cloudf
 11. production Workerのversion preview URLで28正常URL、404、canonical、robots、画像を検証する。
 12. GA4の`G-S7GS8NFDWG`をCloudflare production環境変数`PUBLIC_GA_MEASUREMENT_ID`へ設定し、build成果物に1タグだけ存在することを確認する。ソースコードとpreview環境には設定しない。
 13. Search Consoleは既存propertyを維持する。現在のHTML verification fileを同一path・内容でCloudflare版にも残し、追加するDNS TXTと二重化する。Change of Addressは実施しない。
-14. Formspree + Turnstileの通知先を外部メールアドレスに設定し、domain制限、保持期間、プライバシー文言を承認してproduction previewで試験送信する。
+14. Formspree Form ID `xeajwayl`の外部メール通知、CAPTCHA、production candidate実送信は2026-08-26に確認済み。切り替え前にFormspree domain制限が`calmapercorso.com`であること、Turnstile allowed hostnameが同ドメインのみであることを再確認し、productionへ`PUBLIC_CONTACT_FORM_ENABLED=true`と公開Site Keyを設定する。Secret Keyはコード、GitHub、文書、クライアント成果物へ含めない。
 15. ロールバック担当、Cloudflare/Xserver/registrarへログインできる担当、判定時刻を決める。
 
 ### DNS TTL判断
