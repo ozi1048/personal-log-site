@@ -116,7 +116,7 @@ assert.match(rss, /https:\/\/calmapercorso\.com/);
 assert.doesNotMatch(rss, /workers\.dev|preview/i);
 
 const article = read(inventory[0].slug, 'index.html');
-assert.match(article, /googletagmanager\.com\/gtag\/js\?id=G-PHASE4TEST/);
+assert.match(article, /googletagmanager\.com\/gtag\/js\?id=G-S7GS8NFDWG/);
 assert.match(article, /gtag\('config', gaMeasurementId\)/);
 
 const notFound = read('404.html');

@@ -34,7 +34,8 @@
 - [x] AFFINGER関連記事のリンク先・文言・文脈・desktop表示
 - [x] 共通layoutの375px確認（Phase 2）とPhase 4 responsive CSS確認
 - [ ] iPhone Safari / Android Chrome実機スモークテスト
-- [ ] `/wp-content/uploads/*` no-script routeで画像26/26をproduction候補domainから確認
+- [x] `/wp-content/uploads/*` no-script routeをCloudflare pending zoneへ設定（Worker無効を画面確認）
+- [ ] NS切り替え後、no-script route経由で画像26/26をproduction domainから確認
 
 ## Contact
 
@@ -46,11 +47,11 @@
 - [x] Formspree CAPTCHAを有効化し、登録済みSecret Keyとの連携を実送信で確認（Secret Keyの値は表示・保存していない）
 - [x] Turnstile Site Key `0x4AAAAAAEZOOB4bmw0qotmj`を公開build変数として記録
 - [x] noindexを維持する`production-candidate` buildと専用Worker名を用意
-- [ ] Cloudflare productionで`PUBLIC_CONTACT_FORM_ENABLED=true`とSite Keyを設定
+- [x] production buildへ`PUBLIC_CONTACT_FORM_ENABLED=true`とSite Keyを設定し、別名Workerへdeploy
 - [x] Formspree WorkflowにEmail通知actionがあることを画面確認
 - [x] Formspreeの外部通知先emailへの実着信を確認（2026-08-26 23:07 JST）
 - [x] Turnstile allowed hostnameが`calmapercorso.com`のみであることを画面確認
-- [ ] Formspree domain制限が`calmapercorso.com`であることを画面確認
+- [x] Formspree `Restrict to Domain`を`calmapercorso.com`で保存し、画面確認
 - [x] 候補`workers.dev` hostnameを試験中だけ許可し、試験後に削除（最終状態は`calmapercorso.com`のみ）
 - [x] FormspreeとCloudflare Turnstileの利用をプライバシーポリシーへ反映
 - [x] production candidateで正常送信、必須validation、Turnstile未完了拒否、成功後resetを実ブラウザ確認
@@ -63,7 +64,7 @@
 - [x] GAタグの環境変数・production限定出力を検証
 - [x] GA4 Measurement ID `G-S7GS8NFDWG`を記録
 - [ ] Site Kitで接続中のaccount/property/web streamが`G-S7GS8NFDWG`と一致することを確認
-- [ ] Cloudflare productionの`PUBLIC_GA_MEASUREMENT_ID`へ`G-S7GS8NFDWG`を設定
+- [x] production buildの`PUBLIC_GA_MEASUREMENT_ID`へ`G-S7GS8NFDWG`を設定し、候補HTMLで確認
 - [ ] Tag Assistantで単一発火、GA4 Realtime/DebugViewで受信確認
 - [x] Search Consoleは既存propertyを維持し、Change of Addressを実施しない方針を確認
 - [x] DNS所有権確認TXT `google-site-verification=K2Dl7H9zuV7C8epZencG_7rctK9U8B1aZOlVR6FLFt4`を記録
@@ -80,15 +81,15 @@
 - [x] 3600秒TTLは事前短縮必須でないと判断
 - [ ] Xserver管理画面から完全なDNS zoneをexport
 - [ ] 独自ドメインemailが各サービスのログイン・復旧先・公開連絡先に残っていないことを確認
-- [ ] Cloudflare pending zoneへ必要なWeb/verification recordだけを登録
-- [ ] apex TXTへ`google-site-verification=K2Dl7H9zuV7C8epZencG_7rctK9U8B1aZOlVR6FLFt4`を登録
-- [ ] MX、Xserver用SPF/DKIM、mail、ftp、未使用wildcardをCloudflareへ移行していないことを確認
+- [x] Cloudflare pending zoneへWeb/verification record 3件だけを登録（apex A、www A、Google TXT）
+- [x] apex TXTへ`google-site-verification=K2Dl7H9zuV7C8epZencG_7rctK9U8B1aZOlVR6FLFt4`を登録
+- [x] MX、Xserver用SPF/DKIM、mail、ftp、未使用wildcardをCloudflareへ移行していないことを確認
 - [ ] Cloudflare Email Routingが無効であることを確認
-- [ ] Cloudflare assigned NSへの直接queryでWeb recordとGoogle verification TXTを確認
-- [ ] DNSSEC/DS状態をregistrarで確認
+- [x] Cloudflare assigned NS `dom` / `kinsley`への直接queryでWeb recordとGoogle verification TXTを確認
+- [x] DNSSEC/DS状態を確認（registrar WHOIS `Unsigned`、公開DSなし）
 - [ ] Cloudflare NSへ変更後、Worker routeなしでWordPress/Web/画像を24〜48時間確認
-- [ ] production Workerを別名でdeployしversion固定
-- [ ] `/wp-content/uploads/*` no-script routeを先に設定
+- [x] production Workerを別名でdeployしversion固定（`3ff5563d-fa0a-4cd8-9125-1e1ac59d1d10`）
+- [x] `/wp-content/uploads/*` no-script routeを先に設定
 - [ ] `calmapercorso.com/*` production Worker routeを最後に設定
 - [ ] HTTPS、Full (strict)、www挙動を確認
 
@@ -108,6 +109,7 @@ pnpm migrate:wordpress:snapshot
 pnpm build
 pnpm test
 pnpm test:production
+pnpm test:production-candidate:http
 pnpm audit:prelaunch
 ```
 

@@ -17,9 +17,9 @@ R2移行前は、`calmapercorso.com`をWorker Custom Domainにしない。Cloudf
 5. `url-mapping.csv`、WordPress sitemap、robots.txt、主要HTML、レスポンスヘッダーを保存する。
 6. Xserver DNS管理画面から**全レコードをexportまたは画面保存**する。公開照会だけで完全性を判断しない。
 7. `xserver-mail-dns-plan.md`の利用終了方針に従い、独自ドメインメールがアカウント復旧先、公開連絡先、Formspree通知先に残っていないことを確認する。必要な過去メールはXserver解約前にexportする。
-8. Cloudflare pending zoneにはapex、必要なwww、Search Console等のverification recordだけを登録する。apex TXTへ`google-site-verification=K2Dl7H9zuV7C8epZencG_7rctK9U8B1aZOlVR6FLFt4`を追加し、Cloudflare assigned NSへの直接queryで一致を確認する。MX、Xserver用SPF/DKIM、mail、ftp、未使用wildcardは複製せず、Cloudflare Email Routingも有効化しない。
+8. Cloudflare pending zoneにはapex、必要なwww、Search Console等のverification recordだけを登録する。2026-08-29にapex/www AとGoogle TXTの3件を登録し、assigned NS `dom` / `kinsley`への直接queryで一致を確認済み。MX、Xserver用SPF/DKIM、mail、ftp、未使用wildcardは複製していない。切り替え前にCloudflare Email Routingが無効であることを再確認する。
 9. registrarのDNSSEC/DS状態を確認する。DSがある場合はCloudflare公式手順に従い、NS変更前に安全に移行する。
-10. Cloudflare production Workerをpreviewとは別名でdeployし、version IDを記録する。まだrouteを付けない。
+10. Cloudflare production Workerをpreviewとは別名でdeployし、version IDを記録する。2026-08-27に`personal-log-site-production` version `3ff5563d-fa0a-4cd8-9125-1e1ac59d1d10`を本番routeなしでdeploy済み。
 11. production Workerのversion preview URLで28正常URL、404、canonical、robots、画像を検証する。
 12. GA4の`G-S7GS8NFDWG`をCloudflare production環境変数`PUBLIC_GA_MEASUREMENT_ID`へ設定し、build成果物に1タグだけ存在することを確認する。ソースコードとpreview環境には設定しない。
 13. Search Consoleは既存propertyを維持する。現在のHTML verification fileを同一path・内容でCloudflare版にも残し、追加するDNS TXTと二重化する。Change of Addressは実施しない。

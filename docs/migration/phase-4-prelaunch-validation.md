@@ -1,21 +1,21 @@
 # Phase 4: 本番切り替え前検証
 
-- 実施日: 2026-08-23（Asia/Tokyo）
+- 実施日: 2026-08-23〜2026-08-29（Asia/Tokyo）
 - Production origin: <https://calmapercorso.com>
 - Preview: <https://personal-log-site-preview.cloudflare-migration-plan.workers.dev/>
 - Preview Worker version: `0bc3a6ca-a927-4e66-8623-b9256de5055a`
-- 非変更確認: 本番WordPress、DNS、`calmapercorso.com`の接続先、GA4、Search Console、R2は変更していない
+- 非変更確認: 本番WordPress、公開NS、`calmapercorso.com`の接続先、GA4/Search Console設定、R2は変更していない。Cloudflareには未委任のpending zoneだけを準備した
 
 ## 判定
 
 Astroのコンテンツ・URL・SEO実装は本番切り替え候補として合格。全19記事と固定ページ3件は、保存済み変換元だけでなく2026-08-23時点の公開WordPress REST APIとも再照合し、slug、更新日時、正規化本文ハッシュが22/22件一致した。
 
-ただし、現時点で本番切り替えを実行してはいけない。残る切り替えゲートは次の4点。
+ただし、現時点で本番切り替えを実行してはいけない。2026-08-29時点でDNS/Contact/production Workerの準備は完了し、残る切り替えゲートは次の4点。
 
-1. Cloudflareへ登録するWeb/verification DNS recordの確定とDNSSEC/DS確認
-2. 同一ドメインのWordPress画像を維持するWorker Route除外設定の事前テスト
-3. Search Console所有権方式の確認と、確定したGA4 Measurement IDのproduction設定・受信試験
-4. Formspreeのdomain制限とproduction用環境変数の最終設定（Turnstile、プライバシー文言、production candidate実送信・通知着信は確認済み）
+1. Xserver DNS zone完全export、WordPress直前backup、独自ドメインemail依存の最終確認
+2. CloudflareへNSを変更した後、Worker本番routeを付けずにWordPress/画像/no-script routeを24〜48時間確認
+3. Site Kitの接続先照合、Tag AssistantとGA4 Realtime/DebugViewによる単一発火・受信確認
+4. Search ConsoleのHTML verification file確認と、NS変更後のDNS TXT所有権再確認
 
 ## 全ページ検証
 
@@ -61,7 +61,9 @@ WordPressで空だった本文画像7件を実画像と周辺文脈で確認し�
 ```text
 PUBLIC_DEPLOYMENT_ENV=production
 PUBLIC_SITE_URL=https://calmapercorso.com
-PUBLIC_GA_MEASUREMENT_ID=G-PHASE4TEST（検証専用ダミー）
+PUBLIC_GA_MEASUREMENT_ID=G-S7GS8NFDWG
+PUBLIC_CONTACT_FORM_ENABLED=true
+PUBLIC_TURNSTILE_SITE_KEY=公開Site Key
 BUILD_OUT_DIR=dist-production
 ```
 
@@ -90,11 +92,11 @@ sitemap 28 URLの内訳は、トップ1、記事19、記事一覧1、カテゴ�
 | 外部フォーム（Formspree + Turnstile） | 低 | Freeは50件/月 | Turnstile、domain制限、サービス側filter | 第三者へ送信しFreeは30日保持 | ベンダー依存だが保守最小 | **現在の推奨** |
 | `mailto:`のみ | 最小 | $0 | 公開アドレスが収集されやすい | メールクライアント内 | 端末設定依存、送信完了を確認しにくい | 一時的な退避策 |
 
-Formspree Form ID `xeajwayl`を使うAstro + Vanilla JSフォームを実装した。Ajax送信、必須validation、送信中・成功・失敗表示を持ち、previewではendpointを出力せず入力と送信を無効化する。productionでも`PUBLIC_CONTACT_FORM_ENABLED=true`を明示した場合だけ有効になる。
+Formspree Form ID `xeajwayl`を使うAstro + Vanilla JSフォームを実装した。Ajax送信、必須validation、送信中・成功・失敗表示を持ち、previewではendpointを出力せず入力と送信を無効化する。productionは`PUBLIC_CONTACT_FORM_ENABLED=true`を明示した別名Workerへdeploy済み。
 
 Turnstile Site Key `0x4AAAAAAEZOOB4bmw0qotmj`を公開build変数として設定し、`production-candidate`とproduction buildでwidget、token送信、resetを検証した。Cloudflare画面ではallowed hostnameが`calmapercorso.com`のみであることを確認した。Secret Keyの値はコード、GitHub、文書、クライアント成果物には保存しない。
 
-2026-08-26にFormspree CAPTCHAを有効化し、production candidateで必須入力エラー、Turnstile未完了時の拒否、正常送信、成功後のフォーム・Turnstile resetを実ブラウザ確認した。正常送信はFormspree Inboxへ保存され、外部通知先にも同日23:07 JSTに着信した。候補`workers.dev` hostnameは試験中だけTurnstileへ追加し、試験後に削除済みで、最終allowed hostnameは`calmapercorso.com`のみ。通信・送信失敗時の表示分岐はcandidate build testで確認した。ダミーアドレスと明示的なtest文面による再試験1件はFormspreeのSpamへ分類されたが、実運用相当の送信は正常処理されたためBlocking issueとはしない。残るContact項目はFormspree側domain制限の画面確認とCloudflare production環境変数の設定である。プライバシーポリシーにはFormspreeとCloudflare Turnstileの利用を追記済み。件数増加、独自保持方針、HakubaSafetyとの共通化が必要になった時点でWorker APIへ移行する。
+2026-08-26にFormspree CAPTCHAを有効化し、production candidateで必須入力エラー、Turnstile未完了時の拒否、正常送信、成功後のフォーム・Turnstile resetを実ブラウザ確認した。正常送信はFormspree Inboxへ保存され、外部通知先にも同日23:07 JSTに着信した。候補`workers.dev` hostnameは試験中だけTurnstileへ追加し、試験後に削除済みで、最終allowed hostnameは`calmapercorso.com`のみ。2026-08-29にFormspree `Restrict to Domain`も`calmapercorso.com`で保存した。通信・送信失敗時の表示分岐はcandidate build testで確認した。ダミーアドレスと明示的なtest文面による再試験1件はFormspreeのSpamへ分類されたが、実運用相当の送信は正常処理されたためBlocking issueとはしない。プライバシーポリシーにはFormspreeとCloudflare Turnstileの利用を追記済み。件数増加、独自保持方針、HakubaSafetyとの共通化が必要になった時点でWorker APIへ移行する。
 
 参考: [Turnstile plans](https://developers.cloudflare.com/turnstile/plans/)、[Turnstile server-side validation](https://developers.cloudflare.com/turnstile/get-started/server-side-validation/)、[Formspree account limits](https://help.formspree.io/articles/account-management/account-limits)、[Formspree Turnstile](https://help.formspree.io/articles/form-and-project-settings/protecting-your-forms-with-cloudflare-turnstile/)
 
@@ -110,7 +112,7 @@ GA4 Measurement IDは管理情報から`G-S7GS8NFDWG`と確定した。公開HTM
 - verified ownerと所有権確認方式（DNS TXT、HTML tag/file、GA等）
 - 現在のsitemap送信先と最終取得状態
 
-Cloudflare版はproduction環境変数`PUBLIC_GA_MEASUREMENT_ID`へ`G-S7GS8NFDWG`を設定する。ソースコードやpreview環境へ直書きせず、`GT-WKP7ZVTQ`をMeasurement IDとして代用しない。production build後、Tag AssistantとGA4 Realtime/DebugViewでpage_viewを1回だけ送ることを確認する。Search Consoleは同一domain・同一URL移行なのでChange of Addressは使わず、既存propertyを維持し、所有権tokenをCloudflare DNSまたはHTMLへ引き継ぐ。
+Cloudflare版はproduction build変数`PUBLIC_GA_MEASUREMENT_ID`へ`G-S7GS8NFDWG`を設定し、Route未接続の別名Worker HTMLでタグ出力を確認した。Astro + Static Assetsでは公開変数はbuild時に埋め込まれるため、Worker runtime secretとしては扱わない。preview環境には設定せず、`GT-WKP7ZVTQ`をMeasurement IDとして代用しない。Tag AssistantとGA4 Realtime/DebugViewによるpage_viewの単一受信確認は本番hostname接続後に行う。Search Consoleは同一domain・同一URL移行なのでChange of Addressは使わず、既存propertyを維持する。DNS TXTはCloudflare pending zoneへ登録し、割当NSへの直接queryで確認済み。
 
 参考: [Google tag setup](https://developers.google.com/tag-platform/gtagjs)、[Site Kit Analytics](https://sitekit.withgoogle.com/documentation/supported-services/analytics/)、[Site Kit Search Console](https://sitekit.withgoogle.com/documentation/supported-services/search-console/)、[Search Console ownership verification](https://support.google.com/webmasters/answer/9008080)
 
@@ -142,12 +144,19 @@ Worker Custom Domainはhostnameの全pathでWorker自身がoriginになる。そ
 
 Cloudflare Routesは既存originの前段で動き、より具体的なno-script routeでWorkerを迂回できる。Custom Domain化はR2移行後に行う。参考: [Workers Routes](https://developers.cloudflare.com/workers/configuration/routing/routes/)、[Custom Domains](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/)
 
+2026-08-29にCloudflare pending zoneを無料プラン・手動入力で作成した。登録したDNSはproxied A `@` / `www` → `85.131.213.48`と、DNS-onlyのGoogle verification TXTの3件だけで、MX/SPF/DKIM/mail/ftp/wildcardは登録していない。割当NSは`dom.ns.cloudflare.com`と`kinsley.ns.cloudflare.com`で、両NSへの直接queryでレコードを確認した。公開NSは引き続きXserver、WHOISはDNSSEC `Unsigned`、公開DSはない。
+
+同zoneへ`calmapercorso.com/wp-content/uploads/*`をWorkerなし（no-script）で先行登録し、画面上で「このルートではワーカーは無効」を確認した。Xserver origin画像26/26はHTTP 200。pending zoneはまだ公開トラフィックを受けないため、no-script経由のend-to-end HTTP確認はNS変更後の24〜48時間ステージでのみ実施可能であり、それまではチェック未完了とする。
+
 ## テスト結果
 
 - `pnpm migrate:wordpress:snapshot`: 19記事・3固定ページを再現
 - `pnpm build`: 成功、Astro check 0 errors / 0 warnings / 0 hints、29 pages
 - `pnpm test`: 成功
 - `pnpm test:production`: 成功
+- `pnpm test:production-candidate:http`: 成功、31 route、production canonical/robots/GA4/contact、404
 - `pnpm audit:prelaunch`: 成功
 - preview deploy: 成功、version `0bc3a6ca-a927-4e66-8623-b9256de5055a`
-- DNS/WordPress本番変更: 0件
+- production candidate deploy: 成功、<https://personal-log-site-production.cloudflare-migration-plan.workers.dev/>、version `3ff5563d-fa0a-4cd8-9125-1e1ac59d1d10`、本番routeなし
+- 日本語固定ページ2件は小文字percent encodingから大文字percent encodingへ307正規化後200。decode後pathと末尾スラッシュは同一
+- 公開NS/WordPress本番変更: 0件

@@ -17,6 +17,7 @@ pnpm dev
 pnpm build
 pnpm test
 pnpm test:production
+pnpm test:production-candidate:http
 pnpm audit:prelaunch
 ```
 
@@ -52,3 +53,5 @@ PUBLIC_SITE_URL=https://personal-log-site-preview.cloudflare-migration-plan.work
 ```
 
 Phase 4の検証結果は [`docs/migration/phase-4-prelaunch-validation.md`](docs/migration/phase-4-prelaunch-validation.md)、実行前チェックは [`docs/migration/prelaunch-checklist.md`](docs/migration/prelaunch-checklist.md) を参照してください。本番切り替えは明示的な許可があるまで実行しません。
+
+Route未接続のproduction候補は`wrangler.production.jsonc`で別名管理します。`pnpm deploy:production-candidate`は本番用canonical、GA4、Contact設定を含むStatic Assetsをworkers.devへdeployしますが、`calmapercorso.com`のRouteやCustom Domainは設定しません。
