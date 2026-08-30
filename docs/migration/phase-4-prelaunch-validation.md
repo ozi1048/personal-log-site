@@ -146,7 +146,9 @@ Cloudflare Routesは既存originの前段で動き、より具体的なno-script
 
 2026-08-29にCloudflare pending zoneを無料プラン・手動入力で作成した。登録したDNSはproxied A `@` / `www` → `85.131.213.48`と、DNS-onlyのGoogle verification TXTの3件だけで、MX/SPF/DKIM/mail/ftp/wildcardは登録していない。割当NSは`dom.ns.cloudflare.com`と`kinsley.ns.cloudflare.com`で、両NSへの直接queryでレコードを確認した。公開NSは引き続きXserver、WHOISはDNSSEC `Unsigned`、公開DSはない。
 
-同zoneへ`calmapercorso.com/wp-content/uploads/*`をWorkerなし（no-script）で先行登録し、画面上で「このルートではワーカーは無効」を確認した。Xserver origin画像26/26はHTTP 200。pending zoneはまだ公開トラフィックを受けないため、no-script経由のend-to-end HTTP確認はNS変更後の24〜48時間ステージでのみ実施可能であり、それまではチェック未完了とする。
+2026-08-30に公開DNSとassigned NSへの直接queryを再取得し、`dns-pre-ns-snapshot.md`へ保存した。NS変更前後のbackup、実機確認、24〜48時間監視、画像二段階検査、Search Console、GA4、Worker Route Go条件は`ns-change-readiness.md`へ集約した。現在のXserver直配信に対して新しい`pnpm verify:production-images`を実行し、26/26がHTTP 200・`image/png`・非空bodyであることを確認した。これは現時点のorigin baselineであり、no-script routeの実経路確認は包括Worker Route接続直後に再実行して確定する。
+
+同zoneへ`calmapercorso.com/wp-content/uploads/*`をWorkerなし（no-script）で先行登録し、画面上で「このルートではワーカーは無効」を確認した。Xserver origin画像26/26はHTTP 200。NS変更後・包括Worker Route接続前にCloudflare経由のorigin配信を確認し、no-script routeが包括Routeより優先されることのend-to-end確認は包括Route接続直後に同じ26件を再検査して確定する。
 
 ## テスト結果
 

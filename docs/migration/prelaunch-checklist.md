@@ -1,6 +1,25 @@
 # Prelaunch checklist
 
-`[x]`はPhase 4で検証済み、`[ ]`は本番切り替え前に人が確認・承認する項目。未完了項目が1つでもあればNo-Go。
+`[x]`はPhase 4で検証済み、`[ ]`は人が確認・承認する項目。NS変更の判定は直下の「NS change gate」だけを使い、本番Worker Route接続は文書全体の未完了項目を使う。
+
+## NS change gate
+
+NS変更はWebコンテンツのWorker切り替えとは分離する。次の項目がすべて完了し、NS変更について明示的な許可が出た場合だけGoとする。
+
+- [x] Cloudflare pending zoneのapex/www Aが旧WordPress `85.131.213.48`を指す
+- [x] Google verification TXTをassigned NSへの直接queryで確認
+- [x] no-script画像Routeを準備し、本番包括Worker Routeが未接続
+- [x] 公開NS、A、MX/TXT、SOA、DSとCloudflare側recordを2026-08-30に保存
+- [x] 現在のXserver直配信で画像26/26がHTTP 200・`image/*`・非空body
+- [ ] WordPress/Xserver完全backupを取得し、展開・SQL・checksum・保管先を確認
+- [ ] Xserver管理画面の完全なDNS record一覧を保存
+- [ ] registrar、Xserver、Cloudflareへrollback担当者がログイン可能
+- [ ] 独自ドメインemailが重要サービスのログイン・復旧先に残っていない
+- [ ] Cloudflare Email Routingが無効
+- [ ] NS変更時刻、担当者、24〜48時間監視枠、rollback判断者を確定
+- [ ] NS変更についてユーザーの明示的許可
+
+NS変更後も包括Worker Routeは接続せず、旧WordPressを24〜48時間配信・監視する。
 
 ## Content / URL
 
@@ -35,7 +54,9 @@
 - [x] 共通layoutの375px確認（Phase 2）とPhase 4 responsive CSS確認
 - [ ] iPhone Safari / Android Chrome実機スモークテスト
 - [x] `/wp-content/uploads/*` no-script routeをCloudflare pending zoneへ設定（Worker無効を画面確認）
-- [ ] NS切り替え後、no-script route経由で画像26/26をproduction domainから確認
+- [x] 画像26件のproduction domain検査スクリプトと二段階判定手順を準備
+- [ ] NS切り替え後・包括Worker route接続前に画像26/26をproduction domainから確認
+- [ ] 包括Worker route接続直後、no-script route経由で画像26/26を再確認
 
 ## Contact
 
@@ -75,6 +96,7 @@
 ## DNS / Cloudflare
 
 - [x] 公開DNS baselineとTTLを保存
+- [x] 2026-08-30の公開DNSとCloudflare assigned NS直接queryを`dns-pre-ns-snapshot.md`へ保存
 - [x] 現NSがXserver、origin Aが`85.131.213.48`と確認
 - [x] wildcard、MX、SPF、`default._domainkey` DKIMを現DNSの履歴として保存
 - [x] 独自ドメインメールを終了し、メールrecordをCloudflareへ移行しない方針を文書化
@@ -96,6 +118,8 @@
 ## Backup / rollback
 
 - [ ] WordPress DB、wp-content、設定の直前backup
+- [ ] SQL内の主要table、archive展開、代表画像、容量、SHA-256を確認
+- [ ] Xserver外の2か所へbackupを保存し、復元開始手順を共有
 - [ ] Xserver DNS、Cloudflare DNS、route、Worker versionを保存
 - [ ] rollback担当と判断基準を共有
 - [ ] route解除でWordPressへ戻ることを事前確認
@@ -111,6 +135,7 @@ pnpm test
 pnpm test:production
 pnpm test:production-candidate:http
 pnpm audit:prelaunch
+pnpm verify:production-images
 ```
 
-すべて成功し、上の`[ ]`が完了し、明示的な本番切り替え許可が出た場合だけ`production-cutover-plan.md`を実行する。
+`ns-change-readiness.md`の実機・監視・Google・画像二段階手順も使用する。NS変更前に実行可能な項目がすべて成功し、明示的なNS変更許可が出た場合だけNSを変更する。本番Worker RouteはNS変更後24〜48時間の監視と第1段階画像検査が成功し、別途明示的なRoute接続許可が出た場合だけ接続する。

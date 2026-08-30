@@ -15,6 +15,7 @@
     "test:production-candidate:http": "node scripts/test-production-candidate-http.mjs",
     "test:production": "pnpm build:production && BUILD_DIR=dist-production node scripts/test-production-build.mjs",
     "audit:prelaunch": "node scripts/audit-prelaunch.mjs",
+    "verify:production-images": "node scripts/verify-production-images.mjs",
     "check": "ASTRO_TELEMETRY_DISABLED=1 astro check",
     "migrate:wordpress": "node scripts/migrate-wordpress.mjs",
     "migrate:wordpress:snapshot": "node scripts/migrate-wordpress.mjs --from-snapshot",
