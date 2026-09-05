@@ -5,7 +5,7 @@ export const SITE = {
   language: 'ja',
   author: 'calmapercorso',
   productionOrigin: 'https://calmapercorso.com',
-  defaultOgImage: 'https://calmapercorso.com/wp-content/uploads/2026/05/転職14回、全収入推移。-1.png',
+  defaultOgImage: 'https://calmapercorso.com/images/editorial/hero-road-mountains.jpg',
 } as const;
 
 export const CATEGORIES = {
@@ -15,6 +15,8 @@ export const CATEGORIES = {
     displayLabel: '転　職',
     description: '働き方を変えるたびに見えたもの。転職と仕事の記録。',
     marker: 'WORK',
+    image: '/images/editorial/category-career.jpg',
+    imageAlt: '山あいの小さな駅と線路',
   },
   money: {
     slug: 'money',
@@ -22,6 +24,8 @@ export const CATEGORIES = {
     displayLabel: '借　金',
     description: '借りた日から、整理し直すまで。お金と選択の記録。',
     marker: 'DEBT',
+    image: '/images/editorial/category-money.jpg',
+    imageAlt: 'ノートとレシートが置かれた生活のテーブル',
   },
   relocation: {
     slug: 'relocation',
@@ -29,6 +33,8 @@ export const CATEGORIES = {
     displayLabel: '移　住',
     description: '東京を離れ、長野で暮らしてわかったこと。移住の記録。',
     marker: 'MOVE',
+    image: '/images/editorial/category-relocation.jpg',
+    imageAlt: '山あいの集落へ続く道',
   },
 } as const;
 

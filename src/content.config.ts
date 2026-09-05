@@ -21,6 +21,7 @@ const posts = defineCollection({
     updatedAt: z.coerce.date(),
     categories: z.array(z.enum(categories)).min(1),
     featuredImage: z.url(),
+    editorialImage: z.string().startsWith('/').optional(),
     canonical: z.url(),
     wordpressId: z.number().int().positive(),
     logNumber: z.number().int().positive(),

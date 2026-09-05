@@ -21,6 +21,7 @@ interface Props {
 const { post, previous, next, related, timeline } = Astro.props;
 const pageUrl = canonicalFor(`/${post.data.slug}/`, post.data.canonical);
 const primaryCategory = CATEGORIES[post.data.categories[0]];
+const displayImage = post.data.editorialImage ?? primaryCategory.image;
 const schemas = [
   articleSchema({
     title: post.data.title,
@@ -48,8 +49,10 @@ const schemas = [
 >
   <article class="post-page">
     <header class="post-hero shell-reading">
-      <p class="post-sequence"><span>PAST LOG</span> 記録 #{String(post.data.logNumber).padStart(2, '0')}</p>
-      <CategoryPills categories={post.data.categories} />
+      <div class="post-meta-row">
+        <CategoryPills categories={post.data.categories} />
+        <p class="post-sequence">記録 #{String(post.data.logNumber).padStart(2, '0')}</p>
+      </div>
       <h1>{post.data.title.replace(/^【#\d+】\s*/, '')}</h1>
       <p class="post-lead">{post.data.description}</p>
       <div class="post-dates">
@@ -61,7 +64,7 @@ const schemas = [
     </header>
 
     <div class="post-cover shell-wide">
-      <RemoteImage src={post.data.featuredImage} alt={post.data.title} loading="eager" />
+      <RemoteImage src={displayImage} alt={primaryCategory.imageAlt} loading="eager" />
       <span aria-hidden="true">#{String(post.data.logNumber).padStart(2, '0')}</span>
     </div>
 

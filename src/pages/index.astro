@@ -2,41 +2,51 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ArticleCard from '../components/ArticleCard.astro';
-import Timeline from '../components/Timeline.astro';
 import { CATEGORIES } from '../config/site';
 import { byNewest, byLogNumber, publishedPosts } from '../lib/content';
 
 const posts = publishedPosts(await getCollection('posts'));
 const newest = [...posts].sort(byNewest);
 const timeline = [...posts].sort(byLogNumber);
+const latest = newest.slice(0, 6);
+const categoryGroups = Object.values(CATEGORIES).map((category) => ({
+  category,
+  posts: newest.filter((post) => post.data.categories.includes(category.slug)).slice(0, 3),
+}));
 ---
 
 <BaseLayout>
   <section class="hero">
-    <div class="shell hero-grid">
-      <div>
-        <p class="eyebrow">A PERSONAL ARCHIVE OF WRONG TURNS</p>
-        <h1>過去は、<br /><em>失敗</em>だけでは<br />終わらない。</h1>
-      </div>
-      <div class="hero-copy">
-        <p>転職、借金、移住。<br />うまくいかなかった選択を、起きた順に読み返すための個人記録。</p>
-        <div class="hero-index">LOG 01 — 19 / 2026</div>
+    <div class="shell hero-frame">
+      <img src="/images/editorial/hero-road-mountains.jpg" alt="山へ続く一本道にひとり立つ人" width="1536" height="1024" loading="eager" fetchpriority="high" />
+      <div class="hero-shade" aria-hidden="true"></div>
+      <div class="hero-content">
+        <p class="hero-brand">calmapercorso</p>
+        <h1>転職、借金、移住。<br /><span>うまくいかなかったことも</span><br />記録していく。</h1>
+        <div class="hero-foot">
+          <p>失敗や選択を、起きた順に残している個人の過去ログです。</p>
+          <span>LOG 01—{String(posts.length).padStart(2, '0')}</span>
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section category-intro">
     <div class="shell">
       <div class="section-heading">
-        <div><p class="eyebrow">THREE THREADS</p><h2>3つのテーマから読む</h2></div>
+        <div><p class="eyebrow">THREE THREADS</p><h2>どの記録から読みますか</h2></div>
         <a class="text-link" href="/category/">カテゴリ一覧 →</a>
       </div>
       <div class="category-grid">
         {Object.values(CATEGORIES).map((category, index) => (
           <a class="category-panel" href={`/category/${category.slug}/`} data-marker={category.marker}>
-            <small>0{index + 1} / {category.marker}</small>
-            <h2>{category.displayLabel}</h2>
-            <p>{category.description}</p>
+            <img src={category.image} alt="" loading="lazy" />
+            <span class="category-panel-shade" aria-hidden="true"></span>
+            <span class="category-panel-copy">
+              <small>0{index + 1} / {category.marker}</small>
+              <strong>{category.label}</strong>
+              <span>{category.description}</span>
+            </span>
           </a>
         ))}
       </div>
@@ -46,21 +56,53 @@ const timeline = [...posts].sort(byLogNumber);
   <section class="section">
     <div class="shell">
       <div class="section-heading">
-        <div><p class="eyebrow">LATEST LOGS</p><h2>新しい記録</h2></div>
+        <div><p class="eyebrow">RECENT LOGS</p><h2>最近の記録</h2></div>
         <a class="text-link" href="/articles/">すべての記録 →</a>
       </div>
       <div class="article-grid">
-        {newest.map((post, index) => <ArticleCard post={post} featured={index === 0} />)}
+        {latest.map((post, index) => <ArticleCard post={post} featured={index === 0} />)}
       </div>
     </div>
   </section>
 
-  <section class="section">
-    <div class="shell-reading">
+  <section class="section category-log-section">
+    <div class="shell">
       <div class="section-heading">
-        <div><p class="eyebrow">READ IN ORDER</p><h2>#1から時系列で読む</h2></div>
+        <div><p class="eyebrow">FOLLOW A THREAD</p><h2>テーマごとにたどる</h2></div>
       </div>
-      <Timeline posts={timeline} />
+      <div class="category-log-grid">
+        {categoryGroups.map(({ category, posts: categoryPosts }) => (
+          <section class="category-log-column">
+            <header>
+              <p>{category.marker}</p>
+              <h3>{category.label}</h3>
+              <a href={`/category/${category.slug}/`}>すべて見る →</a>
+            </header>
+            <ol>
+              {categoryPosts.map((post) => (
+                <li><a href={`/${post.data.slug}/`}><span>#{String(post.data.logNumber).padStart(2, '0')}</span>{post.data.title.replace(/^【#\d+】\s*/, '')}</a></li>
+              ))}
+            </ol>
+          </section>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section about-home">
+    <div class="shell about-home-grid">
+      <div>
+        <p class="eyebrow">ABOUT THIS LOG</p>
+        <h2>ちゃんとできなかったことも、<br />あとから読める形にする。</h2>
+      </div>
+      <div class="about-home-copy">
+        <p>転職を繰り返したこと、借金をしたこと、東京を離れたこと。成功談に整えず、そのとき何を考えていたのかを記録しています。</p>
+        <p>どこから読んでも大丈夫です。順番に追いたいときは、最初の記録からどうぞ。</p>
+        <div class="about-home-links">
+          <a class="text-link" href="/プロフィール/">このブログについて →</a>
+          <a class="text-link" href={`/${timeline[0].data.slug}/`}>#01から読む →</a>
+        </div>
+      </div>
     </div>
   </section>
 </BaseLayout>

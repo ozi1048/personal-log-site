@@ -18,5 +18,16 @@ import { CATEGORIES, SITE } from '../config/site';
       ))}
       <a href="/プロフィール/">プロフィール</a>
     </nav>
+    <details class="mobile-menu">
+      <summary>メニュー</summary>
+      <nav aria-label="モバイルナビゲーション">
+        <a href="/articles/">記録一覧</a>
+        {Object.values(CATEGORIES).map((category) => (
+          <a href={`/category/${category.slug}/`}>{category.label}</a>
+        ))}
+        <a href="/プロフィール/">プロフィール</a>
+        <a href="/お問い合わせ/">お問い合わせ</a>
+      </nav>
+    </details>
   </div>
 </header>
