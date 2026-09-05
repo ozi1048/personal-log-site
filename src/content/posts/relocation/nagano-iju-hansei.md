@@ -8,7 +8,8 @@ publishedAt: 2026-02-20T10:43:23+09:00
 updatedAt: 2026-03-31T15:14:51+09:00
 categories:
   - "relocation"
-featuredImage: "https://calmapercorso.com/wp-content/uploads/2026/02/見出しを追加.png"
+featuredImage: "/images/posts/nagano-iju-hansei.webp"
+featuredImageAlt: "雪山を窓越しに見つめる移住者の後ろ姿"
 canonical: "https://calmapercorso.com/nagano-iju-hansei/"
 wordpressId: 135
 logNumber: 10

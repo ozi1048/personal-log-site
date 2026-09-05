@@ -8,7 +8,8 @@ publishedAt: 2026-03-20T18:57:54+09:00
 updatedAt: 2026-04-04T17:09:22+09:00
 categories:
   - "career"
-featuredImage: "https://calmapercorso.com/wp-content/uploads/2026/03/元タクシードライバーの㊙️営業術-2.png"
+featuredImage: "/images/posts/tokyo-taxi-nenshu-real.webp"
+featuredImageAlt: "雨上がりの高架下を走る東京のタクシー"
 canonical: "https://calmapercorso.com/tokyo-taxi-nenshu-real/"
 wordpressId: 161
 logNumber: 14

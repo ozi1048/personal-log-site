@@ -3,7 +3,6 @@ import type { Post } from '../lib/content';
 import { formatDate, postPath } from '../lib/content';
 import CategoryPills from './CategoryPills.astro';
 import RemoteImage from './RemoteImage.astro';
-import { CATEGORIES } from '../config/site';
 
 interface Props {
   post: Post;
@@ -11,13 +10,11 @@ interface Props {
 }
 
 const { post, featured = false } = Astro.props;
-const primaryCategory = CATEGORIES[post.data.categories[0]];
-const displayImage = post.data.editorialImage ?? primaryCategory.image;
 ---
 
 <article class:list={['article-card', { featured }]}>
   <a class="article-card-image" href={postPath(post)} tabindex="-1" aria-hidden="true">
-    <RemoteImage src={displayImage} alt="" />
+    <RemoteImage src={post.data.featuredImage} alt="" width={1600} height={900} />
     <span class="log-stamp">#{String(post.data.logNumber).padStart(2, '0')}</span>
   </a>
   <div class="article-card-body">

@@ -21,13 +21,12 @@ interface Props {
 const { post, previous, next, related, timeline } = Astro.props;
 const pageUrl = canonicalFor(`/${post.data.slug}/`, post.data.canonical);
 const primaryCategory = CATEGORIES[post.data.categories[0]];
-const displayImage = post.data.editorialImage ?? primaryCategory.image;
 const schemas = [
   articleSchema({
     title: post.data.title,
     description: post.data.description,
     url: pageUrl,
-    image: resolveImageUrl(post.data.featuredImage),
+    image: resolveImageUrl(post.data.featuredImage, new URL(pageUrl).origin),
     publishedAt: post.data.publishedAt,
     updatedAt: post.data.updatedAt,
   }),
@@ -64,7 +63,13 @@ const schemas = [
     </header>
 
     <div class="post-cover shell-wide">
-      <RemoteImage src={displayImage} alt={primaryCategory.imageAlt} loading="eager" />
+      <RemoteImage
+        src={post.data.featuredImage}
+        alt={post.data.featuredImageAlt}
+        loading="eager"
+        width={1600}
+        height={900}
+      />
       <span aria-hidden="true">#{String(post.data.logNumber).padStart(2, '0')}</span>
     </div>
 

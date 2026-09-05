@@ -8,7 +8,8 @@ publishedAt: 2026-01-17T16:45:40+09:00
 updatedAt: 2026-03-31T15:13:09+09:00
 categories:
   - "career"
-featuredImage: "https://calmapercorso.com/wp-content/uploads/2026/01/見出しを追加-17.png"
+featuredImage: "/images/posts/first-career-change.webp"
+featuredImageAlt: "郊外の駅ホームで電車を見送る会社員"
 canonical: "https://calmapercorso.com/first-career-change/"
 wordpressId: 76
 logNumber: 1

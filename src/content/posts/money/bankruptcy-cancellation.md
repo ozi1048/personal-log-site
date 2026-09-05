@@ -9,7 +9,8 @@ updatedAt: 2026-03-31T15:14:10+09:00
 categories:
   - "money"
   - "relocation"
-featuredImage: "https://calmapercorso.com/wp-content/uploads/2026/01/見出しを追加-23.png"
+featuredImage: "/images/posts/bankruptcy-cancellation.webp"
+featuredImageAlt: "書類封筒が残された法律事務所の待合室"
 canonical: "https://calmapercorso.com/bankruptcy-cancellation/"
 wordpressId: 101
 logNumber: 6

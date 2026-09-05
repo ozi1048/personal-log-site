@@ -6,9 +6,11 @@ interface Props {
   alt: string;
   class?: string;
   loading?: 'lazy' | 'eager';
+  width?: number;
+  height?: number;
 }
 
-const { src, alt, class: className, loading = 'lazy' } = Astro.props;
+const { src, alt, class: className, loading = 'lazy', width, height } = Astro.props;
 ---
 
 <img
@@ -18,4 +20,6 @@ const { src, alt, class: className, loading = 'lazy' } = Astro.props;
   loading={loading}
   decoding="async"
   referrerpolicy="no-referrer"
+  width={width}
+  height={height}
 />

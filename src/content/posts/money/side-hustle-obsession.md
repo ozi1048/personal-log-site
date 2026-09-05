@@ -9,7 +9,8 @@ updatedAt: 2026-03-31T15:14:00+09:00
 categories:
   - "money"
   - "career"
-featuredImage: "https://calmapercorso.com/wp-content/uploads/2026/01/見出しを追加-22.png"
+featuredImage: "/images/posts/side-hustle-obsession.webp"
+featuredImageAlt: "荷物とノートが積まれた深夜の自宅作業机"
 canonical: "https://calmapercorso.com/side-hustle-obsession/"
 wordpressId: 95
 logNumber: 5

@@ -28,7 +28,7 @@ const {
 
 const pageTitle = title ? `${title} | ${SITE.name}` : `${SITE.name} — 過去と向き合うための記録`;
 const canonical = canonicalFor(Astro.url.pathname, sourceCanonical);
-const ogImage = resolveImageUrl(image);
+const ogImage = resolveImageUrl(image, new URL(canonical).origin);
 const schemas = Array.isArray(schema) ? schema : [schema];
 const gaMeasurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
 const robotsContent = isPreview ? 'noindex, nofollow, noarchive, nosnippet' : robots;

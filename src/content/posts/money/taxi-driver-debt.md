@@ -9,7 +9,8 @@ updatedAt: 2026-03-31T15:15:03+09:00
 categories:
   - "money"
   - "career"
-featuredImage: "https://calmapercorso.com/wp-content/uploads/2026/02/見出しを追加-28.png"
+featuredImage: "/images/posts/taxi-driver-debt.webp"
+featuredImageAlt: "荷物を載せて夜明けの東京に停まるタクシー"
 canonical: "https://calmapercorso.com/taxi-driver-debt/"
 wordpressId: 142
 logNumber: 11

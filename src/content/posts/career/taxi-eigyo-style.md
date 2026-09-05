@@ -8,7 +8,8 @@ publishedAt: 2026-03-28T17:14:39+09:00
 updatedAt: 2026-03-31T15:15:46+09:00
 categories:
   - "career"
-featuredImage: "https://calmapercorso.com/wp-content/uploads/2026/03/元タクシードライバーの㊙️営業術-1.png"
+featuredImage: "/images/posts/taxi-eigyo-style.webp"
+featuredImageAlt: "分かれ道を前にした東京のタクシー車内"
 canonical: "https://calmapercorso.com/taxi-eigyo-style/"
 wordpressId: 169
 logNumber: 15

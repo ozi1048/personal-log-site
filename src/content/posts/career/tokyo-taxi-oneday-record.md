@@ -8,7 +8,8 @@ publishedAt: 2026-04-01T00:28:11+09:00
 updatedAt: 2026-04-01T00:28:11+09:00
 categories:
   - "career"
-featuredImage: "https://calmapercorso.com/wp-content/uploads/2026/03/タクシードライバーのリアルな1日-2.png"
+featuredImage: "/images/posts/tokyo-taxi-oneday-record.webp"
+featuredImageAlt: "休憩中のタクシー車内から見える川沿いの街"
 canonical: "https://calmapercorso.com/tokyo-taxi-oneday-record/"
 wordpressId: 192
 logNumber: 16

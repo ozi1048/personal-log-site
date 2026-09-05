@@ -8,7 +8,8 @@ publishedAt: 2026-02-16T23:43:21+09:00
 updatedAt: 2026-03-31T15:14:39+09:00
 categories:
   - "relocation"
-featuredImage: "https://calmapercorso.com/wp-content/uploads/2026/02/見出しを追加-26.png"
+featuredImage: "/images/posts/nagano-migration-rent.webp"
+featuredImageAlt: "段ボールと鍵が置かれた雪国の空き部屋"
 canonical: "https://calmapercorso.com/nagano-migration-rent/"
 wordpressId: 128
 logNumber: 9

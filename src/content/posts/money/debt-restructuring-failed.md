@@ -8,7 +8,8 @@ publishedAt: 2026-01-18T15:49:07+09:00
 updatedAt: 2026-03-31T15:13:39+09:00
 categories:
   - "money"
-featuredImage: "https://calmapercorso.com/wp-content/uploads/2026/01/見出しを追加-21.png"
+featuredImage: "/images/posts/debt-restructuring-failed.webp"
+featuredImageAlt: "返済用の封筒とノートが置かれた夜の机"
 canonical: "https://calmapercorso.com/debt-restructuring-failed/"
 wordpressId: 90
 logNumber: 4

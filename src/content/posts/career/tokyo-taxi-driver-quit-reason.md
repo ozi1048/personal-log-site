@@ -8,7 +8,8 @@ publishedAt: 2026-04-05T01:11:30+09:00
 updatedAt: 2026-04-05T01:11:30+09:00
 categories:
   - "career"
-featuredImage: "https://calmapercorso.com/wp-content/uploads/2026/04/元タクシードライバーの㊙️営業術-4.png"
+featuredImage: "/images/posts/tokyo-taxi-driver-quit-reason.webp"
+featuredImageAlt: "勤務を終えたあとの空のタクシー運転席"
 canonical: "https://calmapercorso.com/tokyo-taxi-driver-quit-reason/"
 wordpressId: 201
 logNumber: 17

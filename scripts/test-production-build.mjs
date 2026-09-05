@@ -42,7 +42,10 @@ for (const post of inventory) {
   assert.match(html, /<meta name="robots" content="index, follow, max-image-preview:large">/);
   assert.ok(html.includes(`<link rel="canonical" href="${post.canonical}">`), `canonical mismatch: ${post.slug}`);
   assert.ok(html.includes(`<meta property="og:url" content="${post.canonical}">`), `OG URL mismatch: ${post.slug}`);
-  assert.ok(html.includes(post.featured_image) || html.includes(encodeURI(post.featured_image)), `featured image missing: ${post.slug}`);
+  const featuredImageUrl = `${productionOrigin}/images/posts/${post.slug}.webp`;
+  assert.ok(html.includes(`/images/posts/${post.slug}.webp`), `featured image missing: ${post.slug}`);
+  assert.ok(html.includes(`<meta property="og:image" content="${featuredImageUrl}">`), `production OGP image mismatch: ${post.slug}`);
+  assert.ok(html.includes(`<meta name="twitter:image" content="${featuredImageUrl}">`), `production Twitter image mismatch: ${post.slug}`);
   assert.equal((html.match(/<h1(?:\s|>)/g) ?? []).length, 1, `H1 count mismatch: ${post.slug}`);
   assert.match(html, /<meta name="description" content="[^"]+">/);
   assert.match(html, /<meta property="og:title" content="[^"]+">/);

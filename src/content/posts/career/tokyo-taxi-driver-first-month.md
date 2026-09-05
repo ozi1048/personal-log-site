@@ -8,7 +8,8 @@ publishedAt: 2026-03-13T00:05:40+09:00
 updatedAt: 2026-03-31T15:15:14+09:00
 categories:
   - "career"
-featuredImage: "https://calmapercorso.com/wp-content/uploads/2026/03/見出しを追加-29.png"
+featuredImage: "/images/posts/tokyo-taxi-driver-first-month.webp"
+featuredImageAlt: "教習コースを歩く指導員と研修中のタクシー"
 canonical: "https://calmapercorso.com/tokyo-taxi-driver-first-month/"
 wordpressId: 148
 logNumber: 12

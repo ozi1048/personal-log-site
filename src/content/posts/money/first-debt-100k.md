@@ -8,7 +8,8 @@ publishedAt: 2026-01-18T12:49:51+09:00
 updatedAt: 2026-03-31T15:12:56+09:00
 categories:
   - "money"
-featuredImage: "https://calmapercorso.com/wp-content/uploads/2026/01/見出しを追加-19.png"
+featuredImage: "/images/posts/first-debt-100k.webp"
+featuredImageAlt: "夜のATMでカードを差し出す若者の手元"
 canonical: "https://calmapercorso.com/first-debt-100k/"
 wordpressId: 81
 logNumber: 2

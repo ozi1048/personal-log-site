@@ -75,8 +75,9 @@ for (const post of inventory) {
   assert.ok(html.includes(`<link rel="canonical" href="${previewOrigin}/${post.slug}/">`), `preview canonical mismatch: ${post.slug}`);
   assert.match(html, /<meta property="og:title"/);
   assert.match(html, /<meta property="og:description"/);
-  assert.match(html, /<meta property="og:image"/);
+  assert.ok(html.includes(`<meta property="og:image" content="${previewOrigin}/images/posts/${post.slug}.webp">`), `preview OGP image mismatch: ${post.slug}`);
   assert.match(html, /<meta name="twitter:card" content="summary_large_image">/);
+  assert.ok(html.includes(`<meta name="twitter:image" content="${previewOrigin}/images/posts/${post.slug}.webp">`), `preview Twitter image mismatch: ${post.slug}`);
   assert.match(html, /"@type":"BlogPosting"/, `BlogPosting missing: ${post.slug}`);
   assert.match(html, /"@type":"BreadcrumbList"/, `BreadcrumbList missing: ${post.slug}`);
   for (const imageUrl of post.body_images) {

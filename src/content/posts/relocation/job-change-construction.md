@@ -9,7 +9,8 @@ updatedAt: 2026-04-12T15:11:10+09:00
 categories:
   - "relocation"
   - "career"
-featuredImage: "https://calmapercorso.com/wp-content/uploads/2026/04/タクシードライバーのリアルな1日-3.png"
+featuredImage: "/images/posts/job-change-construction.webp"
+featuredImageAlt: "地方の建設現場に置かれた作業靴とヘルメット"
 canonical: "https://calmapercorso.com/job-change-construction/"
 wordpressId: 215
 logNumber: 18

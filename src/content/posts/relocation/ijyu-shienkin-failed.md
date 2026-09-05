@@ -9,7 +9,8 @@ updatedAt: 2026-03-31T15:14:32+09:00
 categories:
   - "relocation"
   - "career"
-featuredImage: "https://calmapercorso.com/wp-content/uploads/2026/02/見出しを追加-25.png"
+featuredImage: "/images/posts/ijyu-shienkin-failed.webp"
+featuredImageAlt: "山が見える役所の廊下で書類を持って待つ人"
 canonical: "https://calmapercorso.com/ijyu-shienkin-failed/"
 wordpressId: 117
 logNumber: 8

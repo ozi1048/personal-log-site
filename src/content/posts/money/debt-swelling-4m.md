@@ -8,7 +8,8 @@ publishedAt: 2026-01-18T14:25:50+09:00
 updatedAt: 2026-03-31T15:13:28+09:00
 categories:
   - "money"
-featuredImage: "https://calmapercorso.com/wp-content/uploads/2026/01/見出しを追加-20.png"
+featuredImage: "/images/posts/debt-swelling-4m.webp"
+featuredImageAlt: "財布の横に積み重なった請求書の束"
 canonical: "https://calmapercorso.com/debt-swelling-4m/"
 wordpressId: 86
 logNumber: 3

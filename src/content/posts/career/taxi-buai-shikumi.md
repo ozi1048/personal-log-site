@@ -8,7 +8,8 @@ publishedAt: 2026-03-15T15:06:08+09:00
 updatedAt: 2026-03-31T15:15:28+09:00
 categories:
   - "career"
-featuredImage: "https://calmapercorso.com/wp-content/uploads/2026/03/見出しを追加-30.png"
+featuredImage: "/images/posts/taxi-buai-shikumi.webp"
+featuredImageAlt: "夜明けの東京を走るタクシーの運転席"
 canonical: "https://calmapercorso.com/taxi-buai-shikumi/"
 wordpressId: 153
 logNumber: 13

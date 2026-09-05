@@ -8,7 +8,8 @@ publishedAt: 2026-05-03T14:20:16+09:00
 updatedAt: 2026-05-03T14:20:17+09:00
 categories:
   - "career"
-featuredImage: "https://calmapercorso.com/wp-content/uploads/2026/05/転職14回、全収入推移。-1.png"
+featuredImage: "/images/posts/job-income-history.webp"
+featuredImageAlt: "収入記録の書類とグラフを開いた静かな机"
 canonical: "https://calmapercorso.com/job-income-history/"
 wordpressId: 219
 logNumber: 19

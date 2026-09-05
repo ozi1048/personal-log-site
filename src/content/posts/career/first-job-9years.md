@@ -8,7 +8,8 @@ publishedAt: 2026-01-29T00:19:52+09:00
 updatedAt: 2026-03-31T15:14:22+09:00
 categories:
   - "career"
-featuredImage: "https://calmapercorso.com/wp-content/uploads/2026/01/見出しを追加-24.png"
+featuredImage: "/images/posts/first-job-9years.webp"
+featuredImageAlt: "夜のオフィスに残された明かりのついた机"
 canonical: "https://calmapercorso.com/first-job-9years/"
 wordpressId: 107
 logNumber: 7
