@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 const origin = process.env.PUBLIC_SITE_URL || 'https://personal-log-site-preview.cloudflare-migration-plan.workers.dev';
@@ -25,4 +25,13 @@ assert.equal((sitemap.match(/<url>/g) ?? []).length, 28);
 const rss = await (await fetch(new URL('/rss.xml', origin))).text();
 assert.equal((rss.match(/<item>/g) ?? []).length, 19);
 
-console.log(`Verified ${mapping.length} deployed WordPress paths resolve to HTTP 200 with equivalent paths, noindex headers, 404, sitemap and RSS.`);
+const featuredImages = readdirSync(resolve(process.cwd(), 'public/images/posts'))
+  .filter((file) => file.endsWith('.webp'));
+assert.equal(featuredImages.length, 19, 'expected 19 deployed featured images');
+for (const image of featuredImages) {
+  const response = await fetch(new URL(`/images/posts/${image}`, origin));
+  assert.equal(response.status, 200, `deployed featured image did not resolve: ${image}`);
+  assert.match(response.headers.get('content-type') ?? '', /image\/webp/, `unexpected featured image content type: ${image}`);
+}
+
+console.log(`Verified ${mapping.length} deployed WordPress paths, 19 WebP featured images, noindex headers, 404, sitemap and RSS.`);
