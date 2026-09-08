@@ -9,7 +9,7 @@ updatedAt: 2026-03-31T15:13:28+09:00
 categories:
   - "money"
 featuredImage: "/images/posts/debt-swelling-4m.webp"
-featuredImageAlt: "財布の横に積み重なった請求書の束"
+featuredImageAlt: "台所のテーブルに置かれた使い込んだ財布、封筒と家計ノート"
 canonical: "https://calmapercorso.com/debt-swelling-4m/"
 wordpressId: 86
 logNumber: 3

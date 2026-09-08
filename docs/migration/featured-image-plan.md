@@ -26,7 +26,7 @@
 | `tokyo-taxi-oneday-record` | career | `/images/posts/tokyo-taxi-oneday-record.webp` | 休憩中のタクシー車内から見える川沿いの街 | 初期編集用生成画像 |
 | `bankruptcy-cancellation` | money | `/images/posts/bankruptcy-cancellation.webp` | 書類封筒が残された法律事務所の待合室 | 初期編集用生成画像 |
 | `debt-restructuring-failed` | money | `/images/posts/debt-restructuring-failed.webp` | 返済用の封筒とノートが置かれた夜の机 | 初期編集用生成画像 |
-| `debt-swelling-4m` | money | `/images/posts/debt-swelling-4m.webp` | 財布の横に積み重なった請求書の束 | 初期編集用生成画像 |
+| `debt-swelling-4m` | money | `/images/posts/debt-swelling-4m.webp` | 台所のテーブルに置かれた使い込んだ財布、封筒と家計ノート | 2026-09-08改訂。紙の山を生活感のある控えめな場面へ変更 |
 | `first-debt-100k` | money | `/images/posts/first-debt-100k.webp` | 夜のATMでカードを差し出す若者の手元 | 初期編集用生成画像 |
 | `side-hustle-obsession` | money | `/images/posts/side-hustle-obsession.webp` | 荷物とノートが積まれた深夜の自宅作業机 | 初期編集用生成画像 |
 | `taxi-driver-debt` | money | `/images/posts/taxi-driver-debt.webp` | 荷物を載せて夜明けの東京に停まるタクシー | 初期編集用生成画像 |
